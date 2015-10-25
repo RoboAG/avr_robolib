@@ -1,0 +1,21 @@
+/**
+ * @page assembler Assembler
+ * 
+ *
+ * <b> file </b> \n
+ * system/assembler.h
+ *
+ *
+ * <b> description </b> \n
+ * The assembler modul contains functions for direct usage of
+ * assembler function.
+ * 
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * [none]
+ *
+ * It uses the the following macros: \n
+ * [none]
+ */
+ 

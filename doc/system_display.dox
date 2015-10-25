@@ -1,0 +1,66 @@
+/**
+ * @page display Display
+ * 
+ *
+ * <b> file </b> \n
+ * system/display.h
+ *
+ *
+ * <b> description </b> \n
+ * The display modul contains functions for printing data to a 
+ * Display.
+ * 
+ * The functions work with standard displays using the KS0070B controller.
+ *
+ * The controller is initalized to use two or four lines and 
+ * 5x7 dots for each character.
+ * 
+ * There will be no automatic linebreak check at the end of a display line.
+ * Due to the internal memory of the display line 0 relates to address
+ * 0x00-0x0F and display line 1 relates to address 0x40-0x4F.
+ *
+ * The port connected to the control pins (RS, RW, E) will be set to PORTA 
+ * if the preprocessor switch DISPLAY_PORTx is not set to an other value.
+ *
+ * The pin number connected to the enable-signal will be set to pin 4
+ * if the preprocessor switch DISPLAY_PIN_E is not set to an other value.
+ *
+ * The pin number connected to the RS-signal will be set to pin 5
+ * if the preprocessor switch DISPLAY_PIN_RS is not set to an other value.
+ *
+ * The pin number connected to the RW-signal will be set to pin 6
+ * if the preprocessor switch DISPLAY_PIN_RW is not set to an other value.
+ *
+ * The port connected to the data pins 4-7 will be set to the same port 
+ * as the control pins if the preprocessor switch DISPLAY_DATA_PORTx
+ * is not set to an other value.
+ *
+ * The data pins 4-7 will be set to the pins 0-3 of the data port 
+ * if the preprocessor switch DISPLAY_DATA_HI is not set. Otherwise
+ * the data pins 4-7 are set to pins 4-7.
+ *
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * + string modul (system/string.h)
+ * + delay modul  (system/delay.h)
+ *
+ * It uses the the following macros: \n
+ * + DISPLAY_PORT      (defaults to A (for PORTA) if not used)
+ * + DISPLAY_PIN_RS    (defaults to 5 if not used)
+ * + DISPLAY_PIN_RW    (defaults to 6 if not used)
+ * + DISPLAY_PIN_E     (defaults to 4 if not used)
+ * + DISPLAY_DATA_PORT (defaults to DISPLAY_PORT if not used)
+ * + DISPLAY_DATA_HI
+ *
+ *
+ * <b> example </b> \n
+ * Here is an examples for the overall usage:
+ * + @link display.c @endlink
+ *
+ * @example display.c
+ * @example display_header.ini
+ *
+ * @example Makefile
+ */
+ 

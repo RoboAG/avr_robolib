@@ -1,0 +1,21 @@
+/**
+ * @page types Types
+ * 
+ *
+ * <b> file </b> \n
+ * system/types.h
+ *
+ *
+ * <b> description </b> \n
+ * The types modul contains data structures for easy access and conversion
+ * between the different integer types.
+ *
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * [none]
+ *
+ * It uses the the following macros: \n
+ * [none]
+ */
+ 

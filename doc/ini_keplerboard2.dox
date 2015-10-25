@@ -1,0 +1,14 @@
+/**
+ * @page keplerboard2 Keplerboard2
+ *
+ *
+ * <b> file </b> \n
+ * ini/keplerboard2.ini
+ *
+ *
+ * <b> description </b> \n
+ * It is designed to handle the hardware moduls of the keplerboard.
+ *
+ * \image html keplerboard_2.jpg Version 6.1.0
+ *
+ */

@@ -1,0 +1,28 @@
+/**
+ * @page adc ADC
+ * 
+ *
+ * <b> file </b> \n
+ * system/adc.h
+ *
+ *
+ * <b> description </b> \n
+ * The adc modul is needed to read the analog data from the adc-pins.
+ *
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * + string modul (system/string.h)
+ *
+ * It uses the the following macros: \n
+ * [none]
+ *
+ *
+ * <b> example </b> \n
+ * Here is an @link adc.c example @endlink for the overall usage.
+ *
+ * @example adc.c
+ * @example adc_header.ini
+ * @example Makefile
+ *
+ */

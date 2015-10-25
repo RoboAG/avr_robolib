@@ -1,0 +1,6 @@
+adc_atmega2561
+  created
+
+adc_atmega64
+  1:1 copy from adc_atmega2561 (all registers and funktions are identical)
+    only one unused bit does not exist (ACME in ADCSRB)

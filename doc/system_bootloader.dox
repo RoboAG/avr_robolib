@@ -1,0 +1,41 @@
+/**
+ * @page bootloader Bootloader
+ *
+ *
+ * <b> file </b> \n
+ * system/bootloader.h
+ *
+ *
+ * <b> description </b> \n
+ * The bootloader modul is generic bootloader used for downloading
+ * new programs to the microcontroller
+ *
+ * This modul is in some context "inverse" defined.
+ * All the main functions are just prototypes and the user must
+ *   define those functions (e.g. bootloader_data_in).
+ * Also the main function is already defined within the bootloader modul,
+ * therefore it can not be defined within the users source files.
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * + delay modul (system/delay.h)
+ *
+ * It uses the the following macros: \n
+ * + F_CPU
+ * + BOOTSTART
+ *
+ * <b> additional files </b> \n
+ * An adequate downloader can be found here: \n
+ * https://www-user.tu-chemnitz.de/~wepet/software/downloader/
+ *
+ * It uses the the following macros: \n
+ * + F_CPU
+ * + BOOTLOADER_START
+ *
+ * <b> example </b> \n
+ * Here is an @link bootloader.c example @endlink for the overall usage.
+ *
+ * @example bootloader.c
+ * @example bootloader_header.ini
+ * @example Makefile
+ */

@@ -1,0 +1,66 @@
+/**
+ * @mainpage
+ *
+ * This is the RoboLib.
+ *
+ * It is designed to handle the hardware moduls of the keplerboard and
+ *   similar devices.
+ *
+ * It consists of several parts:
+ * - hardware interaction - low level
+ *   + @link adc     Adc     @endlink (system/adc.h)
+ *   + @link tick    Systick (current) @endlink (system/tick.h)
+ *   + @link timer   Timer (future)    @endlink (_system/timer.h)
+ *   + @link uart0   UART0   @endlink (system/uart0.h)
+ *   + @link uart1   UART1   @endlink (system/uart1.h)
+ *   + @link display Display @endlink (system/display.h)
+ *
+ *
+ * - hardware interaction - second level
+ *   + @link motor          Motor (future)   @endlink (_system/motor.h)
+ *   + @link systick        Systick (future) @endlink (_system/systick.h)
+ *   + @link adc_timer      Adc timer      @endlink (system/adc_timer.h)
+ *   + @link display_buffer Display buffer @endlink (system/display_buffer.h)
+ *
+ *
+ * - helper functions
+ *   + @link delay      Delay      @endlink (system/delay.h)
+ *   + @link string     String     @endlink (system/string.h)
+ *   + @link bootloader Bootloader @endlink (system/bootloader.h)
+ *
+ *
+ * - declarations
+ *   + @link assembler Assembler @endlink (system/assembler.h)
+ *   + @link types     Types     @endlink (system/types.h)
+ *
+ *
+ * - predefined ini-files
+ *   + @link keplerboard  Keplerboard   @endlink (ini/keplerboard.ini)
+ *   + @link keplerboard2 Keplerboard2  @endlink (ini/keplerboard2.ini)
+ *   + @link keplerboard3 Keplerboard3  @endlink (ini/keplerboard3.ini)
+ *
+ *
+ */
+
+
+/**
+ * @brief Initializes all included moduls.
+ *
+ * This function calls the init-functions of all included moduls.
+ * Therefore it should be the first command within the main-function.
+ *
+ * This function activates the global interrupt flag.
+ * @sa system_init_cli()
+ */
+void system_init(void);
+
+/**
+ * @brief Initializes all included moduls.
+ *
+ * This function calls the init-functions of all included moduls.
+ * Therefore it should be the first command within the main-function.
+ *
+ * This function does not activate the gloabl interrupt flag.
+ * @sa system_init()
+ */
+void system_init_cli(void);

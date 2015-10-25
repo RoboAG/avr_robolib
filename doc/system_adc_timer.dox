@@ -1,0 +1,31 @@
+/**
+ * @page adc_timer ADC Timer
+ *
+ *
+ * <b> file </b> \n
+ * system/adc_timer.h
+ *
+ *
+ * <b> description </b> \n
+ * The adc timer modul increasing the performance of the adc modul.
+ *
+ * It uses the systick to cyclic read all selected adc-pins.
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * + string modul (system/string.h)
+ * + adc modul (system/adc.h)
+ * + current systick modul (system/tick.h)
+ *
+ * It uses the the following macros: \n
+ * [none]
+ *
+ *
+ * <b> example </b> \n
+ * Here is an @link adc_timer.c example @endlink for the overall usage.
+ *
+ * @example adc_timer.c
+ * @example adc_timer_header.ini
+ * @example Makefile
+ *
+ */

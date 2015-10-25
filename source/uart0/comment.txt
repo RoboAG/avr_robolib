@@ -1,0 +1,5 @@
+uart0_atmega2561
+  created
+
+uart0_atmega64
+  1:1 copy from uart1_atmega2561 (all registers and funktions are identical)

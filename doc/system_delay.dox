@@ -1,0 +1,29 @@
+/**
+ * @page delay Delay
+ * 
+ *
+ * <b> file </b> \n
+ * system/delay.h
+ *
+ *
+ * <b> description </b> \n
+ * The delay modul has several functions which let the controller wait.
+ * 
+ * If there is a heavy load on interrupts the duration of the waiting functions will increase.
+ * 
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * + string modul (system/string.h)
+ *
+ * This modul depends on the following macros: \n
+ * + F_CPU
+ *
+ *
+ * <b> example </b> \n
+ * Here is an @link adc.c example @endlink for the overall usage.
+ *
+ * @example adc.c
+ * @example adc_header.ini
+ * @example Makefile
+ */

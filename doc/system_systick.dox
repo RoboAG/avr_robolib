@@ -1,0 +1,38 @@
+/**
+ * @page systick Systick
+ * 
+ *
+ * <b> file </b> \n
+ * system/systick.h
+ *
+ *
+ * <b> description </b> \n
+ * The systick modul is needed by several other moduls (e.g. analog modul).
+ * 
+ * It continuously counts the ticks and gives back the current time since the
+ * last reset.
+ * 
+ * The internal systick variable is 16 bits wide. Therefore the highest possible
+ * value is 65535.
+ *
+ * Setting the systick frequency to 100 Hz, one tick equals 10 ms
+ * and the maximum value equals 10 minutes, 55 seconds and 350 milliseconds.
+ *
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * + string modul (system/string.h)
+ *
+ * It uses the the following macros: \n
+ * + F_CPU
+ * + SYSTICK_TIMER
+ * + SYSTICK_FREQUENCY
+ *
+ *
+ * <b> example </b> \n
+ * Here is an @link systick.c example @endlink for the overall usage.
+ *
+ * @example systick.c
+ * @example systick_header.ini
+ * @example Makefile
+ */

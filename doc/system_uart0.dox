@@ -1,0 +1,47 @@
+/**
+ * @page uart0 UART0
+ * 
+ *
+ * <b> file </b> \n
+ * system/uart0.h
+ *
+ *
+ * <b> description </b> \n
+ * The uart0 modul contains functions for sending data to and 
+ * recieving data from the UART0.
+ * 
+ * The baudrate will be set to 57600 if the preprocessor switch
+ * UART0_BAUD is not set.
+ *
+ * The transmit buffer will be used if the preprocessor switch
+ * UART0_TX is set between 3 and 256.
+ *
+ * The recieve buffer will be used if the preprocessor switch
+ * UART0_RX is set between 3 and 256.
+ *
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * + string modul (system/string.h)
+ *
+ * It uses the the following macros: \n
+ * + F_CPU
+ * + UART0_BAUD (defaults to 57600 if not used)
+ * + UART0_TX
+ * + UART0_RX
+ *
+ *
+ * <b> example </b> \n
+ * Here are two examples for the overall usage:
+ * + @link adc.c @endlink
+ * + @link timer.c @endlink
+ *
+ * @example adc.c
+ * @example adc_header.ini
+ *
+ * @example timer.c
+ * @example timer_header.ini
+ *
+ * @example Makefile
+ */
+ 

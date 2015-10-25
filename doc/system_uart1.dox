@@ -1,0 +1,38 @@
+/**
+ * @page uart1 UART1
+ * 
+ *
+ * <b> file </b> \n
+ * system/uart1.h
+ *
+ *
+ * <b> description </b> \n
+ * The uart1 modul contains functions for sending data to and 
+ * recieving data from the UART1.
+ * 
+ * The baudrate will be set to 57600 if the preprocessor switch
+ * UART1_BAUD is not set.
+ *
+ * The transmit buffer will be used if the preprocessor switch
+ * UART1_TX is set between 3 and 256.
+ *
+ * The recieve buffer will be used if the preprocessor switch
+ * UART1_RX is set between 3 and 256.
+ *
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following moduls: \n
+ * + string modul (system/string.h)
+ *
+ * It uses the the following macros: \n
+ * + F_CPU
+ * + UART1_BAUD (defaults to 57600 if not used)
+ * + UART1_TX
+ * + UART1_RX
+ *
+ *
+ * <b> example </b> \n
+ * Similar examples for the overall usage can be found
+ * at @link uart0 Uart0 @endlink.
+ */
+ 
