@@ -3,7 +3,7 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.0.2                                                              #
+# Version: 1.0.3                                                              #
 # Date   : 25.10.15                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -17,8 +17,9 @@ URL_GIT_BASE=https://github.com/peterweissig/
 URL_GIT_THIS=$(URL_GIT_BASE)$(NAME_GIT_THIS).git
 
 ###############################################################################
-NAME_DOWNLOADER64=downloader_64
-NAME_DOWNLOADER32=downloader_32
+NAME_DOWNLOADER=downloader
+NAME_DOWNLOADER64=$(NAME_DOWNLOADER)_64
+NAME_DOWNLOADER32=$(NAME_DOWNLOADER)_32
 
 PATH_DOWNLOADER=bin/additionals/
 
@@ -87,6 +88,12 @@ update:
 
 #	-rm $(PATH_DOWNLOADER)$(NAME_DOWNLOADER32)
 #	wget -nv --directory-prefix=$(PATH_DOWNLOADER) $(URL_GIT_DOWNLOADER32)
+
+ifneq ($(strip $(shell uname -m | grep -o 64)),)
+	@echo "using 64-bit version of downloader"
+	@cp $(PATH_DOWNLOADER)$(NAME_DOWNLOADER64)                            \
+          $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
+endif
 
 
 status:
