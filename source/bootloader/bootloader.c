@@ -10,7 +10,7 @@
 
 //**************************<File version>*************************************
 #define SYSTEM_BOOTLOADER_VERSION \
-    "source/bootloader/bootloader.c 23.10.2015 V1.0.1"
+    "source/bootloader/bootloader.c 26.10.2015 V1.0.2"
 
 //**************************<Included files>***********************************
 #include "system/bootloader.h"
@@ -100,9 +100,17 @@ uint8_t system_bootloader_wait_char(uint8_t character) {
     return 0x00;
 }
 
-//**************************[system_bootloader_error]************************** 27.09.2015
+//**************************[system_bootloader_error]************************** 26.10.2015
 void system_bootloader_error(){
 
+    // enable read while write section
+    cli();
+    boot_rww_enable_safe();
+    sei();
+    eeprom_busy_wait();
+    boot_spm_busy_wait();
+
+    // send error string
     bootloader_data_out('e');
     bootloader_data_out('r');
     bootloader_data_out('r');
@@ -266,7 +274,7 @@ void system_bootloader_adrget_out() {
     bootloader_data_out(13);
 }
 
-//**************************[system_bootloader_write]************************** 27.09.2015
+//**************************[system_bootloader_write]************************** 26.10.2015
 void system_bootloader_write() {
 
     //  system_bootloader_wait_char('w') &&
@@ -276,7 +284,10 @@ void system_bootloader_write() {
       system_bootloader_wait_char(  'e')) {
 
         // erase page buffer
+        cli();
         boot_page_erase_safe(system_bootloader_flashadr.u);
+        sei();
+        eeprom_busy_wait();
         boot_spm_busy_wait();
 
         // fill page buffer
@@ -296,19 +307,29 @@ void system_bootloader_write() {
             data = bootloader_data_in(); crc+= data; w.l = data;
             if (! system_bootloader_wait()) { return;}
             data = bootloader_data_in(); crc+= data; w.h = data;
+
             cli();
             boot_page_fill_safe (flashadr.u, w.u);
             sei();
+            eeprom_busy_wait();
+            boot_spm_busy_wait();
+
             flashadr.u+= 2;
         }
 
         // write page buffer
         cli();
         boot_page_write_safe(system_bootloader_flashadr.u);
-        boot_spm_busy_wait();
         sei();
+        eeprom_busy_wait();
+        boot_spm_busy_wait();
 
+        // enable read while write section
+        cli();
         boot_rww_enable_safe();
+        sei();
+        eeprom_busy_wait();
+        boot_spm_busy_wait();
 
         // send checksum
         bootloader_data_out('W');
@@ -326,8 +347,6 @@ void system_bootloader_read() {
       system_bootloader_wait_char(  'd')) {
 
         bootloader_data_out('R');
-
-        boot_rww_enable_safe();
 
         // read page
         uint16_t count;
@@ -383,7 +402,7 @@ int main (void) {
             case 'a' : system_bootloader_adrget(); break;
             case 'r' : system_bootloader_read();   break;
             case 'w' : system_bootloader_write();  break;
-            default  : system_bootloader_error();   break;
+            default  : system_bootloader_error();  break;
         }
     }
     return (0);

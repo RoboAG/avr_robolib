@@ -2,13 +2,9 @@
 * system/uart0.h                                                              *
 * ==============                                                              *
 *                                                                             *
-* Version: 1.0.0                                                              *
-* Date   : 27.09.15                                                           *
+* Version: 1.0.1                                                              *
+* Date   : 26.10.15                                                           *
 * Author : Peter Weissig                                                      *
-*                                                                             *
-* Changelog:                                                                  *
-*   27.09.15(V1.0.0)                                                          *
-*     - first release                                                         *
 *                                                                             *
 * For help or bug report please visit:                                        *
 *   https://github.com/peterweissig/robolib                                   *

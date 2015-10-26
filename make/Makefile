@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.4.2                                                              #
-# Date   : 25.10.15                                                           #
+# Version: 1.4.3                                                              #
+# Date   : 26.10.15                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -44,8 +44,10 @@ RESET_SEQUENCE  =
 
 # Settings of the comport (e.g. "/dev/ttyACM0" with "4" µs clocktime) for
 # downloading via avrdude ("make avrdude")
-COMPORT_AVRDUDE  = /dev/ttyACM0
+# If sudo is set avrdude is run with root privileges.
+COMPORT_AVRDUDE  = usb
 BAUDRATE_AVRDUDE = 4
+SUDO_AVRDUDE =
 
 # Directory of the used library (main-folder).
 # If the path is set to "" the parent folder of this Makefile (../)
@@ -96,7 +98,11 @@ TERMINAL = python $(PATH_LIB_INTERNAL)bin/data.py
 TERMINAL_OPTIONS = $(COMPORT_DATA_INTERNAL) $(BAUDRATE_DATA)
 
 # name of downloader
-AVRDUDE = avrdude
+ifeq ($(SUDO_AVRDUDE),)
+  AVRDUDE = avrdude
+else
+  AVRDUDE = sudo avrdude
+endif
 # downloader options
 AVRDUDE_OPTIONS = -v -p $(MCU) -P $(COMPORT_AVRDUDE) -c AVRISP2               \
   -B $(BAUDRATE_AVRDUDE) -e -U flash:w:$(OUTPUT).hex

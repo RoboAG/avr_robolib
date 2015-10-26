@@ -10,7 +10,7 @@
 
 //**************************<File version>*************************************
 #define SYSTEM_UART1_VERSION \
-    "source/uart1/uart1.c 27.09.2015 V1.0.0"
+    "source/uart1/uart1.c 26.10.2015 V1.0.1"
 
 //**************************<Included files>***********************************
 #include "system/uart1.h"
@@ -44,6 +44,9 @@
 #elif  defined (__AVR_ATmega64__  ) // switch micro controller
     #include <source/uart1/uart1_atmega64.c>
     #define MCU atmega64
+#elif  defined (__AVR_ATmega644P__  ) // switch micro controller
+    #include <source/uart1/uart1_atmega644p.c>
+    #define MCU atmega644p
 #else                               // switch micro controller
     #error "device is not supported (yet)"
 #endif                              // switch micro controller
