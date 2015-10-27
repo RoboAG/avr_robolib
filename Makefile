@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.0.3                                                              #
-# Date   : 25.10.15                                                           #
+# Version: 1.0.4                                                              #
+# Date   : 26.10.15                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -93,6 +93,7 @@ ifneq ($(strip $(shell uname -m | grep -o 64)),)
 	@echo "using 64-bit version of downloader"
 	@cp $(PATH_DOWNLOADER)$(NAME_DOWNLOADER64)                            \
           $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
+	@chmod u+x $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
 endif
 
 
