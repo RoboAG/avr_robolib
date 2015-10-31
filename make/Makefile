@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.4.3                                                              #
-# Date   : 26.10.15                                                           #
+# Version: 1.4.4                                                              #
+# Date   : 31.10.15                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -44,8 +44,8 @@ RESET_SEQUENCE  =
 
 # Settings of the comport (e.g. "/dev/ttyACM0" with "4" µs clocktime) for
 # downloading via avrdude ("make avrdude")
-# If sudo is set avrdude is run with root privileges.
-COMPORT_AVRDUDE  = usb
+# If SUDO_AVRDUDE is set avrdude is run with root privileges.
+COMPORT_AVRDUDE  = /dev/ttyACM0
 BAUDRATE_AVRDUDE = 4
 SUDO_AVRDUDE =
 
@@ -63,6 +63,10 @@ BOOTSTART =
 # OPTIONAL - If set the flags MAKE_PROGRAM_IN_NEW_TERMINAL and
 # MAKE_DATA_IN_NEW_TERMINAL will be set.
 KATE =
+
+# Flag for using pololu-lib
+# OPTIONAL - if set the project will also be linked against pololu-lib
+POLOLU =
 
 # Flag for opening a new console for the download ("make program").
 # OPTIONAL - If set the downloader starts in a separate console.
@@ -227,6 +231,17 @@ ifneq ($(strip $(INI_FILES)),)
 endif
 
 ###############################################################################
+# pololu
+
+ifneq ($(strip $(POLOLU)),)
+  POLOLU_LIB = $(PATH_MAKE)../../pololu/libpololu_$(MCU).a
+
+  POLOLU_HEADER = $(PATH_MAKE)../../pololu/src/
+  #POLOLU_HEADER = $(PATH_MAKE)../../pololu/pololu/
+  #POLOLU_HEADER2 = $(PATH_MAKE)../../pololu/src/
+endif
+
+###############################################################################
 # compiler flags
 
 CFLAGS  = -mmcu=$(MCU) -I. -I "$(PATH_LIB_INTERNAL)"
@@ -240,6 +255,10 @@ LDFLAGS = -Wl,-Map=$(PATH_SUB_TMP)$(OUTPUT).map,--cref
 ifneq ($(BOOTSTART),)
 CFLAGS += -DBOOTSTART=$(BOOTSTART)
 LDFLAGS+= -Ttext $(BOOTSTART)
+endif
+
+ifneq ($(POLOLU_HEADER),)
+CFLAGS += -I "$(POLOLU_HEADER)"
 endif
 
 ###############################################################################
@@ -279,11 +298,13 @@ $(PATH_SUB_TMP)%.o: %.c
 
 ini: ini_init $(OBJECTS_INI)
 	@echo
+ifneq ($(strip $(INI_FILES)),)
 	@echo "#### creating library archive"
 	avr-ar rs $(PATH_SUB_LIB)lib.a $(OBJECTS_INI)
 	rm -f $(foreach file,$(filter-out *.a, $(FILES_CLEAN))                \
           , $(PATH_SUB_LIB)$(file))
 	@echo
+endif
 	@echo "#### done :-)"
 	@echo
 
@@ -295,9 +316,17 @@ ini_init:
 	@echo "clearing library-folder \"$(PATH_SUB_LIB)\""
 	-rm -f -R $(PATH_SUB_LIB)*
 	@echo
+ifneq ($(strip $(INI_FILES)),)
 	@echo "creating main header(s) \"$(INI_FILES:.ini=.h)\""
 	@echo -e " $(foreach header,$(INI_FILES:.ini=)                        \
           , $(shell cp -f -v $(header).ini $(header).h)\n)"
+	@echo
+endif
+ifneq ($(strip $(POLOLU_LIB)),)
+	@echo "copying pololu lib \"$(basename $(POLOLU_LIB))\""
+	@cp $(POLOLU_LIB) $(PATH_SUB_LIB)
+	@echo
+endif
 
 $(PATH_SUB_LIB)%.o:
 	@echo
