@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.0.4                                                              #
-# Date   : 26.10.15                                                           #
+# Version: 1.0.5                                                              #
+# Date   : 20.11.15                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -86,15 +86,19 @@ update:
 	-rm $(PATH_DOWNLOADER)$(NAME_DOWNLOADER64)
 	wget -nv --directory-prefix=$(PATH_DOWNLOADER) $(URL_GIT_DOWNLOADER64)
 
-#	-rm $(PATH_DOWNLOADER)$(NAME_DOWNLOADER32)
-#	wget -nv --directory-prefix=$(PATH_DOWNLOADER) $(URL_GIT_DOWNLOADER32)
+	-rm $(PATH_DOWNLOADER)$(NAME_DOWNLOADER32)
+	wget -nv --directory-prefix=$(PATH_DOWNLOADER) $(URL_GIT_DOWNLOADER32)
 
 ifneq ($(strip $(shell uname -m | grep -o 64)),)
 	@echo "using 64-bit version of downloader"
 	@cp $(PATH_DOWNLOADER)$(NAME_DOWNLOADER64)                            \
           $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
-	@chmod u+x $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
+else
+	@echo "using 32-bit version of downloader"
+	@cp $(PATH_DOWNLOADER)$(NAME_DOWNLOADER32)                            \
+          $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
 endif
+	@chmod u+x $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
 
 
 status:

@@ -3,7 +3,7 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.4.4                                                              #
+# Version: 1.4.5                                                              #
 # Date   : 31.10.15                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -323,7 +323,7 @@ ifneq ($(strip $(INI_FILES)),)
 	@echo
 endif
 ifneq ($(strip $(POLOLU_LIB)),)
-	@echo "copying pololu lib \"$(basename $(POLOLU_LIB))\""
+	@echo "copying pololu lib \"$(notdir $(POLOLU_LIB))\""
 	@cp $(POLOLU_LIB) $(PATH_SUB_LIB)
 	@echo
 endif
