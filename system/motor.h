@@ -40,17 +40,8 @@
 //**************************<Functions>****************************************
 /**
  * @brief Sets the speed of both motors.
- *
- * This function sets the  one byte of data to the hardware buffer
- * of the connected display.
- *
- * If the display is not responding in a resonable amount of time
- * it will be disabled.
- *
- * If the display is disabled this and other display functions will return
- * without any effect.
- *
- * This function must be handled with care when called from within an interrupt.
+ * 
+ * 
  *
  * @param l
  * 8-bit speed (maximum 100) of the left motor.
