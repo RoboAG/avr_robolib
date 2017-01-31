@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.4.5                                                              #
-# Date   : 31.10.15                                                           #
+# Version: 1.5.0                                                              #
+# Date   : 31.01.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -76,6 +76,14 @@ MAKE_PROGRAM_IN_NEW_TERMINAL =
 # OPTIONAL - If set the python-script starts in a separate console.
 MAKE_DATA_IN_NEW_TERMINAL =
 
+# Program to be used as terminal (see MAKE_PROGRAM_IN_NEW_TERMINAL and
+# MAKE_DATA_IN_NEW_TERMINAL).
+# OPTIONAL - If not set the following terminals will be checked and used
+#   1. gnome-terminal
+#   2. xfce4-terminal
+#   3. xterm
+FORCE_TERMINAL =
+
 # Flag for debugging (extended output during processing)
 # If not set ("") nothing changes.
 # Otherwise additional output will be generated.
@@ -97,11 +105,11 @@ DOWNLOADER_OPTIONS = -I $(OUTPUT).hex -v -p $(MCU)                            \
   -P $(COMPORT_PROG_INTERNAL) -b $(BAUDRATE_PROG) $(RESET_SEQUENCE)
 
 # name of terminal
-TERMINAL = python $(PATH_LIB_INTERNAL)bin/data.py
+DATA = python $(PATH_LIB_INTERNAL)bin/data.py
 # terminal options
-TERMINAL_OPTIONS = $(COMPORT_DATA_INTERNAL) $(BAUDRATE_DATA)
+DATA_OPTIONS = $(COMPORT_DATA_INTERNAL) $(BAUDRATE_DATA)
 
-# name of downloader
+# name of downloader (avrdude)
 ifeq ($(SUDO_AVRDUDE),)
   AVRDUDE = avrdude
 else
@@ -122,6 +130,31 @@ endif
 PATH_CUR = $(shell pwd)/
 ifneq ($(DEBUG),)
   $(info current dir: $(PATH_CUR))
+endif
+
+# check for terminal (for opening a new console - ..._IN_NEW_TERMINAL)
+ifneq (,$(FORCE_TERMINAL))
+  TERM = "$(FORCE_TERMINAL)"
+else
+  ifeq (,$(MAKE_PROGRAM_IN_NEW_TERMINAL))
+    ifeq (,$(MAKE_DATA_IN_NEW_TERMINAL))
+        temp_term = "no_term_needed"
+    endif
+  endif
+  ifeq (,$(temp_term))
+    ifneq (,$(shell which gnome-terminal))
+      TERM = "gnome-terminal"
+    else
+      ifneq (,$(shell which xfce4-terminal))
+        TERM = "xfce4-terminal"
+      else
+          TERM = "xterm"
+      endif
+    endif
+  endif
+endif
+ifneq ($(DEBUG),)
+  $(info terminal: $(TERM))
 endif
 
 # get current directory of this makefile (for USE_LOCAL_LIBRARY)
@@ -348,9 +381,9 @@ program: $(OUTPUT).hex
 ifeq (,$(MAKE_PROGRAM_IN_NEW_TERMINAL))
 	$(DOWNLOADER) $(DOWNLOADER_OPTIONS)
 else
-	konsole -e bash -c 'cd $(PATH_CUR) && $(DOWNLOADER)                   \
-          $(DOWNLOADER_OPTIONS); echo; echo "<press enter to exit>";          \
-          read dummy'
+	$(TERM) -e "bash -c 'cd $(PATH_CUR) && \
+          $(DOWNLOADER) $(DOWNLOADER_OPTIONS); \
+          echo; echo \"<press enter to exit>\"; read dummy'"
 endif
 
 avrdude: $(OUTPUT).hex
@@ -368,11 +401,11 @@ data:
 	@echo "####" start python script for communication "make data"
 	@mkdir -p $(PATH_SUB_DATA)
 ifeq (,$(MAKE_DATA_IN_NEW_TERMINAL))
-	@cd $(PATH_SUB_DATA) && $(TERMINAL) $(TERMINAL_OPTIONS)
+	@cd $(PATH_SUB_DATA) && $(DATA) $(DATA_OPTIONS)
 	@cd $(PATH_CUR)
 else
-	konsole -e bash -c 'cd $(PATH_CUR)$(PATH_SUB_DATA) && $(TERMINAL)     \
-          $(TERMINAL_OPTIONS)'
+	$(TERM) -e "bash -c 'cd $(PATH_CUR)$(PATH_SUB_DATA) && \
+          $(DATA) $(DATA_OPTIONS)'"
 endif
 
 ###############################################################################
