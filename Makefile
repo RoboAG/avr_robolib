@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.0.5                                                              #
-# Date   : 20.11.15                                                           #
+# Version: 1.1.1                                                              #
+# Date   : 31.03.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -52,7 +52,7 @@ endif
 
 ###############################################################################
 # define phony targets for make commands
-.PHONY: all doc tags additionals clean update status push
+.PHONY: all doc tags additionals clean update status push pull
 
 all: doc tags
 
@@ -75,7 +75,7 @@ additionals:
 	@echo "### create additonal binarys ###"
 ifeq ($(firstword $(wildcard $(PATH_MAKE)$(PATH_ADDITIONALS))),)
 	@echo "* downloading source-files *"
-	mkdir -p $(PATH_MAKE)$(PATH_ADDITIONALS)
+	@mkdir -p $(PATH_MAKE)$(PATH_ADDITIONALS)
 	wget -nv --directory-prefix=$(PATH_MAKE)$(PATH_ADDITIONALS) \
 	  $(URL_CO_ADDITIONALS)
 	cd $(PATH_MAKE)$(PATH_ADDITIONALS) && bash ./checkout.sh
@@ -96,10 +96,7 @@ clean:
 	rm -fv $(PATH_MAKE)examples/Makefile
 	rm -rfv $(PATH_MAKE)tags/*
 
-update:
-	@echo ""
-	@echo "### update $(NAME_GIT_THIS) ###"
-	git pull
+update: pull
 
 status:
 	@echo ""
@@ -110,5 +107,11 @@ push:
 	@echo ""
 	@echo "### pushing of $(NAME_GIT_THIS) ###"
 	git push
+
+pull:
+	@echo ""
+	@echo "### update $(NAME_GIT_THIS) ###"
+	git pull
+
 
 ###############################################################################

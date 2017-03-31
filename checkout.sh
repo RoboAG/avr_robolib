@@ -44,7 +44,7 @@ read answer;
 if [ "$answer" == "yes" ] || [ "$answer" == "Yes" ] || \
    [ "$answer" == "y" ] || [ "$answer" == "Y" ] || \
    [ "$answer" == "YES" ]; then
-    make additionals
+    make -f "${NAME_GIT_THIS}/Makefile" additionals
 fi
 
 if [ $? -eq 0 ]; then
