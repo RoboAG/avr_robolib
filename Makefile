@@ -17,15 +17,14 @@ URL_GIT_BASE=https://github.com/peterweissig/
 URL_GIT_THIS=$(URL_GIT_BASE)$(NAME_GIT_THIS).git
 
 ###############################################################################
-NAME_DOWNLOADER=downloader
-NAME_DOWNLOADER64=$(NAME_DOWNLOADER)_64
-NAME_DOWNLOADER32=$(NAME_DOWNLOADER)_32
+PATH_ADDITIONALS=bin/additionals/
+PATH_DOWNLOADER=bin/downloader
+PATH_XBEE=bin/xbee
 
-PATH_DOWNLOADER=bin/additionals/
+PATH_DOWNLOADER_BIN=$(PATH_ADDITIONALS)/build/avr_downloader/avr_downloader
+PATH_XBEE_BIN=$(PATH_ADDITIONALS)/build/xbee_config/xbee_config
 
-URL_GIT_DOWNLOADER=$(URL_GIT_BASE)cpp_avr_downloader/raw/master/bin/
-URL_GIT_DOWNLOADER64=$(URL_GIT_DOWNLOADER)$(NAME_DOWNLOADER64)
-URL_GIT_DOWNLOADER32=$(URL_GIT_DOWNLOADER)$(NAME_DOWNLOADER32)
+URL_CO_ADDITIONALS=$(URL_GIT_BASE)cpp_avr_downloader/raw/master/checkout.sh
 
 ###############################################################################
 # path and directories
@@ -53,7 +52,7 @@ endif
 
 ###############################################################################
 # define phony targets for make commands
-.PHONY: all doc tags clean update status push
+.PHONY: all doc tags additionals clean update status push
 
 all: doc tags
 
@@ -71,6 +70,25 @@ tags:
           --excmd=pattern $(SOURCE_FILES) $(HEADER_FILES) $(NEW_SOURCE_FILES) \
           $(NEW_HEADER_FILES)
 
+additionals:
+	@echo
+	@echo "### create additonal binarys ###"
+ifeq ($(firstword $(wildcard $(PATH_MAKE)$(PATH_ADDITIONALS))),)
+	@echo "* downloading source-files *"
+	mkdir -p $(PATH_MAKE)$(PATH_ADDITIONALS)
+	wget -nv --directory-prefix=$(PATH_MAKE)$(PATH_ADDITIONALS) \
+	  $(URL_CO_ADDITIONALS)
+	cd $(PATH_MAKE)$(PATH_ADDITIONALS) && bash ./checkout.sh
+	@echo
+endif
+	@echo "* compiling *"
+	cd $(PATH_MAKE)$(PATH_ADDITIONALS) && make
+ifeq ($(firstword $(wildcard $(PATH_MAKE)$(PATH_DOWNLOADER))),)
+	@echo
+	@echo "* linking *"
+	ln -s $(PATH_MAKE)$(PATH_DOWNLOADER_BIN) $(PATH_MAKE)$(PATH_DOWNLOADER)
+endif
+
 clean:
 	@echo
 	@echo "### clean $(NAME_GIT_THIS) ###"
@@ -81,25 +99,7 @@ clean:
 update:
 	@echo ""
 	@echo "### update $(NAME_GIT_THIS) ###"
-	git pull "$(URL_GIT_THIS)"
-
-	-rm $(PATH_DOWNLOADER)$(NAME_DOWNLOADER64)
-	wget -nv --directory-prefix=$(PATH_DOWNLOADER) $(URL_GIT_DOWNLOADER64)
-
-	-rm $(PATH_DOWNLOADER)$(NAME_DOWNLOADER32)
-	wget -nv --directory-prefix=$(PATH_DOWNLOADER) $(URL_GIT_DOWNLOADER32)
-
-ifneq ($(strip $(shell uname -m | grep -o 64)),)
-	@echo "using 64-bit version of downloader"
-	@cp $(PATH_DOWNLOADER)$(NAME_DOWNLOADER64)                            \
-          $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
-else
-	@echo "using 32-bit version of downloader"
-	@cp $(PATH_DOWNLOADER)$(NAME_DOWNLOADER32)                            \
-          $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
-endif
-	@chmod u+x $(PATH_DOWNLOADER)../$(NAME_DOWNLOADER)
-
+	git pull
 
 status:
 	@echo ""
@@ -109,6 +109,6 @@ status:
 push:
 	@echo ""
 	@echo "### pushing of $(NAME_GIT_THIS) ###"
-	git push "$(URL_GIT_THIS)"
+	git push
 
 ###############################################################################

@@ -5,8 +5,8 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.1.0                                                              #
-# Date   : 25.10.15                                                           #
+# Version: 1.2.0                                                              #
+# Date   : 31.03.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -29,26 +29,26 @@ echo ""
 
 
 echo ""
-echo "### renaming this script"
-mv "${NAME_CHECKOUT_SCRIPT}" "_${NAME_CHECKOUT_SCRIPT}"
-
-echo ""
 echo "### checking out the project"
-if [ -d ".git" ]; then
-    echo "This folder already is a git-repository!"
+if [ -d "${NAME_GIT_THIS}" ]; then
+    echo "This project already exists!"
     return
 fi
-git init
-git pull "${URL_GIT_THIS}"
+git clone "${URL_GIT_THIS}" "${NAME_GIT_THIS}"
 
 echo ""
-echo "### updating and downloading additonal files"
-if [ ! -f "Makefile" ]; then
-    echo "Error - no Makefile"
-    return
+echo "### downloading additonal files"
+echo "Do you want to download additional binarys ?"
+echo "(This can also be done later be invocing \"make additionals\")"
+read answer;
+if [ "$answer" == "yes" ] || [ "$answer" == "Yes" ] || \
+   [ "$answer" == "y" ] || [ "$answer" == "Y" ] || \
+   [ "$answer" == "YES" ]; then
+    make additionals
 fi
-make update
 
-echo ""
-echo "### deleting this script"
-rm "_${NAME_CHECKOUT_SCRIPT}"
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "### deleting this script"
+    rm "${NAME_CHECKOUT_SCRIPT}"
+fi
