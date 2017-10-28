@@ -10,7 +10,7 @@
 
 //**************************<File version>*************************************
 #define SYSTEM_UART0_VERSION \
-    "source/uart0/uart0.c 26.10.2015 V1.0.1"
+    "source/uart0/uart0.c 27.10.2017 V1.0.2"
 
 //**************************<Included files>***********************************
 #include "system/uart0.h"
@@ -42,7 +42,7 @@
         #define USART0_UDRE_vect USART_UDRE_vect
     #endif // if !defined(USART0_UDRE_vect)
     #if !defined(USART0_RX_vect)
-        #define USART0_RX_vect USART_RXC_vect
+        #define USART0_RX_vect USART_RX_vect
     #endif // if !defined(USART0_UDRE_vect)
     #if !defined(UCSR0A)
         #define UCSR0A UCSRA
@@ -105,6 +105,9 @@
 #elif defined (__AVR_ATmega644P__  ) // switch micro controller
     #include <source/uart0/uart0_atmega644p.c>
     #define MCU atmega644p
+#elif defined (__AVR_ATmega328P__  ) // switch micro controller
+    #include <source/uart0/uart0_atmega328p.c>
+    #define MCU atmega328p
 #else                              // switch micro controller
     #error "device is not supported (yet)"
 #endif                             // switch micro controller
