@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.0                                                              #
-# Date   : 31.01.17                                                           #
+# Version: 1.5.1                                                              #
+# Date   : 29.10.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -148,7 +148,11 @@ else
       ifneq (,$(shell which xfce4-terminal))
         TERM = "xfce4-terminal"
       else
+        ifneq (,$(shell which konsole))
+          TERM = "konsole"
+        else
           TERM = "xterm"
+        endif
       endif
     endif
   endif
