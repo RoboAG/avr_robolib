@@ -5,7 +5,7 @@ Library for using simple avr-controller - especially made for [keplerboard](http
 
 Install the following packages:
 
-    sudo apt-get install gcc-avr avr-libc binutils-avr git
+    sudo apt-get install gcc-avr avr-libc binutils-avr git python python-serial
 
 Additional recommended packages:
 
@@ -16,7 +16,7 @@ Additional recommended packages:
 Settings:
 
     sudo adduser $USER dialout
-    
+
 
 Download this Repository
 
@@ -36,24 +36,24 @@ Settings for kate - add build-modul
   * Add new target group (e.g. "robo")
 
     "atmega64" is just an example - use appropriate controller
-    
+
     "/dev/ttyUSB0" is just an example - use appropriate interface
 
   * Add taget "clean"
 
 
     make clean   -f /home/xxx/robolib/make/Makefile MCU=atmega64
-    
+
   * Add target "ini"
 
 
     make ini     -f /home/xxx/robolib/make/Makefile MCU=atmega64
-    
+
   * Add target "build"
 
 
     make         -f /home/xxx/robolib/make/Makefile MCU=atmega64
-    
+
   * Add target "program"
 
 
