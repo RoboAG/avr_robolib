@@ -10,7 +10,7 @@
 
 //**************************<File version>*************************************
 #define SYSTEM_UART0_VERSION \
-    "source/uart0/uart0.c 27.10.2017 V1.0.2"
+    "source/uart0/uart0.c 29.10.2017 V1.0.3"
 
 //**************************<Included files>***********************************
 #include "system/uart0.h"
@@ -202,7 +202,7 @@ void uart0_send(uint8_t data) {
     }
 #endif //#ifdef UART0_TX
 
-//**************************[uart0_get]**************************************** 27.09.2015
+//**************************[uart0_get]**************************************** 29.10.2017
 #ifdef UART0_RX
     uint8_t uart0_get() {
 
@@ -214,6 +214,7 @@ void uart0_send(uint8_t data) {
 
         // check if buffer is empty
         if (temp_start == temp_end) {
+            // check if uart is enabled and data is avaiable
             if (UCSR0B & _BV(RXEN0)) {
                 if (UCSR0A & _BV(RXC0)) {
                     result = UDR0;
@@ -224,17 +225,22 @@ void uart0_send(uint8_t data) {
             }
         }
 
+        // wait for data
         while (temp_start == temp_end) {
             sei();
 
+            // check if uart is still activated
             if ((UCSR0B & _BV(RXEN0)) == 0x00) {
                 return 0x00;
             }
             nop();
 
             cli();
+            temp_start = system_uart0_rx_start;
+            temp_end   = system_uart0_rx_end  ;
         }
 
+        // load from buffer
         result = system_uart0_rx[temp_start];
 
         temp_start++;
@@ -247,7 +253,7 @@ void uart0_send(uint8_t data) {
         return result;
     }
 #else //#ifdef UART0_RX
-    uint8_t uart0_get(uint8_t data) {
+    uint8_t uart0_get() {
 
         uint8_t result;
 
@@ -275,7 +281,7 @@ void uart0_send(uint8_t data) {
     }
 #endif //#ifdef UART0_RX
 
-//**************************[uart0_get_nonblocking]**************************** 27.09.2015
+//**************************[uart0_get_nonblocking]**************************** 29.10.2017
 #ifdef UART0_RX
     uint8_t uart0_get_nonblocking() {
 
@@ -318,7 +324,7 @@ void uart0_send(uint8_t data) {
         return 0x00;
     }
 #else //#ifdef UART0_RX
-    uint8_t uart0_get_nonblocking(uint8_t data) {
+    uint8_t uart0_get_nonblocking() {
 
         uint8_t mSREG = SREG;
         uint8_t result;

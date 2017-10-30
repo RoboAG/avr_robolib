@@ -10,7 +10,7 @@
 
 //**************************<File version>*************************************
 #define SYSTEM_UART1_VERSION \
-    "source/uart1/uart1.c 26.10.2015 V1.0.1"
+    "source/uart1/uart1.c 29.10.2017 V1.0.2"
 
 //**************************<Included files>***********************************
 #include "system/uart1.h"
@@ -153,6 +153,7 @@ void uart1_send(uint8_t data) {
 
         // check if buffer is empty
         if (temp_start == temp_end) {
+            // check if uart is enabled and data is avaiable
             if (UCSR1B & _BV(RXEN1)) {
                 if (UCSR1A & _BV(RXC1)) {
                     result = UDR1;
@@ -163,17 +164,22 @@ void uart1_send(uint8_t data) {
             }
         }
 
+        // wait for data
         while (temp_start == temp_end) {
             sei();
 
+            // check if uart is still activated
             if ((UCSR1B & _BV(RXEN1)) == 0x00) {
                 return 0x00;
             }
             nop();
 
             cli();
+            temp_start = system_uart1_rx_start;
+            temp_end   = system_uart1_rx_end  ;
         }
 
+        // load from buffer
         result = system_uart1_rx[temp_start];
 
         temp_start++;
@@ -186,7 +192,7 @@ void uart1_send(uint8_t data) {
         return result;
     }
 #else //#ifdef UART1_RX
-    uint8_t uart1_get(uint8_t data) {
+    uint8_t uart1_get() {
 
         uint8_t result;
 
@@ -257,7 +263,7 @@ void uart1_send(uint8_t data) {
         return 0x00;
     }
 #else //#ifdef UART1_RX
-    uint8_t uart1_get_nonblocking(uint8_t data) {
+    uint8_t uart1_get_nonblocking() {
 
         uint8_t mSREG = SREG;
         uint8_t result;
