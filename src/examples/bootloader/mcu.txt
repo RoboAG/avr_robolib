@@ -1,0 +1,2 @@
+atmega64
+atmega2561
