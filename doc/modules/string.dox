@@ -1,0 +1,34 @@
+/**
+ * @page string String
+ *
+ *
+ * <b> file </b> \n
+ * robolib/string.h
+ *
+ *
+ * <b> description </b> \n
+ * The string modul contains functions for converting and
+ * sending data.
+ *
+ *
+ * <b> dependencies </b> \n
+ * This modul depends on the following modules: \n
+ * <em>[none]</em>
+ *
+ * It uses the the following macros: \n
+ * <em>[none]</em>
+ *
+ *
+ * <b> example </b> \n
+ * Here are two examples for the overall usage:
+ * + @link adc/adc.c @endlink
+ * + @link tick/tick.c @endlink
+ *
+ * @example adc/adc.c
+ * @example adc/adc.ini
+ *
+ * @example tick/tick.c
+ * @example tick/tick.ini
+ *
+ * @example Makefile
+ */

@@ -3,7 +3,7 @@
  *
  *
  * <b> file </b> \n
- * system/bootloader.h
+ * robolib/bootloader.h
  *
  *
  * <b> description </b> \n
@@ -17,8 +17,8 @@
  * therefore it can not be defined within the users source files.
  *
  * <b> dependencies </b> \n
- * This modul depends on the following moduls: \n
- * + delay modul (system/delay.h)
+ * This modul depends on the following modules: \n
+ * + delay modul (robolib/delay.h)
  *
  * It uses the the following macros: \n
  * + F_CPU
@@ -33,9 +33,10 @@
  * + BOOTLOADER_START
  *
  * <b> example </b> \n
- * Here is an @link bootloader.c example @endlink for the overall usage.
+ * Here is an @link bootloader/bootloader.c example @endlink for the overall
+ * usage.
  *
- * @example bootloader.c
- * @example bootloader_header.ini
+ * @example bootloader/bootloader.c
+ * @example bootloader/bootloader.ini
  * @example Makefile
  */

@@ -3,7 +3,7 @@
  *
  *
  * <b> file </b> \n
- * system/adc_timer.h
+ * robolib/adc_timer.h
  *
  *
  * <b> description </b> \n
@@ -12,20 +12,20 @@
  * It uses the systick to cyclic read all selected adc-pins.
  *
  * <b> dependencies </b> \n
- * This modul depends on the following moduls: \n
- * + string modul (system/string.h)
- * + adc modul (system/adc.h)
- * + current systick modul (system/tick.h)
+ * This modul depends on the following modules: \n
+ * + string modul (robolib/string.h)
+ * + adc modul (robolib/adc.h)
+ * + current systick modul (robolib/tick.h)
  *
  * It uses the the following macros: \n
  * [none]
  *
  *
  * <b> example </b> \n
- * Here is an @link adc_timer.c example @endlink for the overall usage.
+ * Here is an @link adc_timer/adc_timer.c example @endlink for the overall usage.
  *
- * @example adc_timer.c
- * @example adc_timer_header.ini
+ * @example adc_timer/adc_timer.c
+ * @example adc_timer/adc_timer.ini
  * @example Makefile
  *
  */

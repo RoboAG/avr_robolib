@@ -1,15 +1,15 @@
 /**
  * @page uart1 UART1
- * 
+ *
  *
  * <b> file </b> \n
- * system/uart1.h
+ * robolib/uart1.h
  *
  *
  * <b> description </b> \n
- * The uart1 modul contains functions for sending data to and 
+ * The uart1 modul contains functions for sending data to and
  * recieving data from the UART1.
- * 
+ *
  * The baudrate will be set to 57600 if the preprocessor switch
  * UART1_BAUD is not set.
  *
@@ -21,8 +21,8 @@
  *
  *
  * <b> dependencies </b> \n
- * This modul depends on the following moduls: \n
- * + string modul (system/string.h)
+ * This modul depends on the following modules: \n
+ * + string modul (robolib/string.h)
  *
  * It uses the the following macros: \n
  * + F_CPU
@@ -35,4 +35,3 @@
  * Similar examples for the overall usage can be found
  * at @link uart0 Uart0 @endlink.
  */
- 

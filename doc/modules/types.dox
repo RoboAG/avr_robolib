@@ -1,9 +1,9 @@
 /**
  * @page types Types
- * 
+ *
  *
  * <b> file </b> \n
- * system/types.h
+ * robolib/types.h
  *
  *
  * <b> description </b> \n
@@ -12,10 +12,10 @@
  *
  *
  * <b> dependencies </b> \n
- * This modul depends on the following moduls: \n
- * [none]
+ * This modul depends on the following modules: \n
+ * <em>[none]</em>
  *
  * It uses the the following macros: \n
- * [none]
+ * <em>[none]</em>
  */
- 
+

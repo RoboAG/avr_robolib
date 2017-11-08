@@ -1,26 +1,26 @@
 /**
  * @page display_buffer Display Buffer
- * 
+ *
  *
  * <b> file </b> \n
- * system/display_buffer.h
+ * robolib/display_buffer.h
  *
  *
  * <b> description </b> \n
  * The display buffer modul contains functions for printing data to a display.
  * In contrast to the display modul the data is first saved in a virtual
- * display (buffer). When updating the whole display is synchonized with 
+ * display (buffer). When updating the whole display is synchonized with
  * virtual display. But only changed characters are printed.
- * 
- * The virtual display can be smaller, but should not be larger than 
+ *
+ * The virtual display can be smaller, but should not be larger than
  * the display in use.
  *
  * There will be no automatic linebreak at the end of a virtual display line.
  *
  * <b> dependencies </b> \n
- * This modul depends on the following moduls: \n
- * + string modul (system/string.h)
- * + display modul  (system/display.h)
+ * This modul depends on the following modules: \n
+ * + string modul (robolib/string.h)
+ * + display modul  (robolib/display.h)
  *
  * It uses the the following macros: \n
  * + DISPLAY_BUFFER_HEIGHT (defaults to 16 if not used)
@@ -29,11 +29,10 @@
  *
  * <b> example </b> \n
  * Here is an examples for the overall usage:
- * + @link display_buffer.c @endlink
+ * + @link display_buffer/display_buffer.c @endlink
  *
- * @example display_buffer.c
- * @example display_buffer_header.ini
+ * @example display_buffer/display_buffer.c
+ * @example display_buffer/display_buffer.ini
  *
  * @example Makefile
  */
- 

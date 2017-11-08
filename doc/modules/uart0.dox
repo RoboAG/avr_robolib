@@ -1,15 +1,15 @@
 /**
  * @page uart0 UART0
- * 
+ *
  *
  * <b> file </b> \n
- * system/uart0.h
+ * robolib/uart0.h
  *
  *
  * <b> description </b> \n
- * The uart0 modul contains functions for sending data to and 
+ * The uart0 modul contains functions for sending data to and
  * recieving data from the UART0.
- * 
+ *
  * The baudrate will be set to 57600 if the preprocessor switch
  * UART0_BAUD is not set.
  *
@@ -21,8 +21,8 @@
  *
  *
  * <b> dependencies </b> \n
- * This modul depends on the following moduls: \n
- * + string modul (system/string.h)
+ * This modul depends on the following modules: \n
+ * + string modul (robolib/string.h)
  *
  * It uses the the following macros: \n
  * + F_CPU
@@ -33,15 +33,14 @@
  *
  * <b> example </b> \n
  * Here are two examples for the overall usage:
- * + @link adc.c @endlink
- * + @link timer.c @endlink
+ * + @link adc/adc.c @endlink
+ * + @link tick/tick.c @endlink
  *
- * @example adc.c
- * @example adc_header.ini
+ * @example adc/adc.c
+ * @example adc/adc.ini
  *
- * @example timer.c
- * @example timer_header.ini
+ * @example tick/tick.c
+ * @example tick/tick.ini
  *
  * @example Makefile
  */
- 

@@ -1,34 +1,26 @@
 /**
  * @page timer Timer
- * 
+ *
  *
  * <b> file </b> \n
- * system/timer.h
+ * robolib/timer.h
  *
  *
  * <b> description </b> \n
- * The timer modul is needed by several other moduls (e.g. systick modul).
- * 
+ * The timer modul is needed by several other modules (e.g. systick modul).
+ *
  * It sets up the internal timers. Therefore they can be used as pwm modulator
  * (e.g. for controlling motors) or frequency generators (e.g. playing simple
  * music).
  *
  * <b> dependencies </b> \n
- * This modul depends on the following moduls: \n
- * + string modul (system/string.h)
+ * This modul depends on the following modules: \n
+ * + string modul (robolib/string.h)
  *
  * It uses the the following macros: \n
  * + F_CPU
  * + TIMERx_MODE
  * + TIMERx_FREQUENCY
- * + TIMERx_RESOLUTION 
+ * + TIMERx_RESOLUTION
  * + TIMERx_OUTPUT
- *
- *
- * <b> example </b> \n
- * Here is an @link timer.c example @endlink for the overall usage.
- *
- * @example timer.c
- * @example timer_header.ini
- * @example Makefile
  */

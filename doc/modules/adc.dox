@@ -1,9 +1,9 @@
 /**
  * @page adc ADC
- * 
+ *
  *
  * <b> file </b> \n
- * system/adc.h
+ * robolib/adc.h
  *
  *
  * <b> description </b> \n
@@ -11,18 +11,18 @@
  *
  *
  * <b> dependencies </b> \n
- * This modul depends on the following moduls: \n
- * + string modul (system/string.h)
+ * This modul depends on the following modules: \n
+ * + string modul (robolib/string.h)
  *
  * It uses the the following macros: \n
- * [none]
+ * <em>[none]</em>
  *
  *
  * <b> example </b> \n
- * Here is an @link adc.c example @endlink for the overall usage.
+ * Here is an @link adc/adc.c example @endlink for the overall usage.
  *
- * @example adc.c
- * @example adc_header.ini
+ * @example adc/adc.c
+ * @example adc/adc.ini
  * @example Makefile
  *
  */
