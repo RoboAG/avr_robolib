@@ -1,7 +1,5 @@
-additionals/
+avr_downloader/
+xbee_config/
 
 downloader
-downloader_64
-downloader_32
-
-xbee_tool
+xbee
