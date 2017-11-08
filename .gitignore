@@ -1,4 +1,4 @@
-_source/
-_system/
 .svn/
+tmp/
+
 todo.txt
