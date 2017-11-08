@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.1                                                              #
-# Date   : 29.10.17                                                           #
+# Version: 1.5.2                                                              #
+# Date   : 06.11.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -229,7 +229,7 @@ endif
 
 # libraries
 ifeq (,$(PATH_LIB))
-  PATH_LIB_INTERNAL = $(PATH_MAKE)../
+  PATH_LIB_INTERNAL = $(PATH_MAKE)../include/
 else
   PATH_LIB_INTERNAL = $(PATH_LIB)
 endif
@@ -305,7 +305,7 @@ endif
 # define phony targets for make commands
 .PHONY: all all_init   ini ini_init   program avrdude   data   clean
 
-all: all_init $(OUTPUT).hex
+all: all_init ini $(OUTPUT).hex
 	@echo
 	@avr-size -A $(PATH_SUB_TMP)$(OUTPUT).elf
 	@echo
