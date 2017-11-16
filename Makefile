@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.2.0                                                              #
-# Date   : 06.11.17                                                           #
+# Version: 1.2.1                                                              #
+# Date   : 10.11.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -17,14 +17,19 @@ SUBDIRS = bin tags doc
 
 ###############################################################################
 # define phony targets for make commands
-.PHONY: all all_init  $(SUBDIRS)  additionals  clean \
+.PHONY: all all_init warn  $(SUBDIRS)  additionals  clean \
         update status push pull
 
 all: all_init $(SUBDIRS)
 
 all_init:
+	@echo
 	@echo "### building $(NAME_GIT_THIS) ###"
 
+warn:
+	@echo
+	@echo "###### reducing output to warnings ######"
+	$(MAKE) | grep -A 3 -B 3 -i warn; dummy=$?
 
 $(SUBDIRS):
 	$(MAKE) -C $@
