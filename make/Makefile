@@ -115,9 +115,9 @@ endif
 
 # get directory of robolib
 ifeq (,$(PATH_ROBOLIB))
-  PATH_ROBOLIB_INTERNAL = $(patsubst %/,%,$(dir $(abspath $(PATH_MAKE)../)))/
+  PATH_ROBOLIB_INTERNAL = $(patsubst %/,%,$(abspath $(PATH_MAKE)../))/
 else
-  PATH_ROBOLIB_INTERNAL = $(patsubst %/,%,$(dir $(abspath $(PATH_ROBOLIB))))/
+  PATH_ROBOLIB_INTERNAL = $(patsubst %/,%,$(abspath $(PATH_ROBOLIB)))/
 endif
 ifneq ($(DEBUG),)
   $(info robolib dir: $(PATH_ROBOLIB_INTERNAL))
@@ -276,7 +276,7 @@ endif
 ###############################################################################
 # compiler and linker flags
 
-CFLAGS  = -mmcu=$(MCU) -I. -I "$(PATH_ROBOLIB_INTERNAL)"
+CFLAGS  = -mmcu=$(MCU) -I. -I "$(PATH_ROBOLIB_INC)"
 CFLAGS += -gstabs -Os -funsigned-char -funsigned-bitfields
 CFLAGS += -fpack-struct -fshort-enums
 CFLAGS += -Wall -Wstrict-prototypes -std=gnu99
@@ -297,12 +297,15 @@ endif
 
 ###############################################################################
 # ignore implicit chain and therefore deletion of object files
-.SECONDARY: $(OBJECTS_NORMAL)
+#.SECONDARY: $(OBJECTS_NORMAL)
 
 # allow second expansion for complex rules
-#.SECONDEXPANSION:
-# wrap percentage symbol
+.SECONDEXPANSION:
+# wrap symbols
 PERCENT=%
+HASHTAG=\#
+QUOTE="
+COLON=:
 
 # define phony targets for make commands
 .PHONY: all all_init   ini ini_init   program avrdude   data   clean
@@ -353,12 +356,12 @@ ini_init:
 	mkdir -p $(PATH_SUB_LIB)
 
 
-$(PATH_SUB_LIB)%.o:
-	@echo
-	@echo "####" compiling \"$@\" based on \"$(filter %/$(basename        \
-          $(notdir $@)).c, $(SOURCES_INI))\"
-	avr-gcc -o $@ -c $(CFLAGS) $(CFLAGS_INCLUDE_INI) $(filter             \
-          %/$(basename $(notdir $@)).c, $(SOURCES_INI))
+# $(PATH_SUB_LIB)%.o:
+# 	@echo
+# 	@echo "####" compiling \"$@\" based on \"$(filter %/$(basename        \
+#           $(notdir $@)).c, $(SOURCES_INI))\"
+# 	avr-gcc -o $@ -c $(CFLAGS) $(CFLAGS_INCLUDE_INI) $(filter             \
+#           %/$(basename $(notdir $@)).c, $(SOURCES_INI))
 
 clean:
 	@echo
@@ -402,43 +405,23 @@ else
 endif
 
 
-
-
-#  # all headers implied by the main header(s)
-#   HEADERS_INI = $(patsubst \#include"%",%,$(patsubst \#include<%>,%,          \
-#     $(filter \#include<%> \#include"%",$(strip $(shell cat $(INI_FILES))))))
-#
-#   ifneq ($(strip $(HEADERS_INI)),)
-#     # all source files implied by the implied headers (HEADERS_INI)
-#     SOURCES_INI = $(foreach header,$(filter-out _%, $(basename $(notdir       \
-#       $(HEADERS_INI)))), $(PATH_ROBOLIB_INTERNAL)source/$(header)/$(header).c)
-#     SOURCES_INI+= $(foreach header,$(filter _%, $(basename $(notdir           \
-#       $(HEADERS_INI)))), $(PATH_ROBOLIB_INTERNAL)_source/$(header)/$(header).c)
-#     # all object files implied by the implied source files (SOURCES_INI)
-#     OBJECTS_INI = $(foreach source,$(basename $(notdir $(SOURCES_INI)))       \
-#       ,$(PATH_SUB_LIB)$(source).o)
-#   endif
-# 	#\"$(filter %/$(basename        \
-#           $(notdir $@)).c, $(SOURCES_INI))\"
-# 	avr-gcc -o $@ -c $(CFLAGS) $(CFLAGS_INCLUDE_INI) $(filter             \
-#           %/$(basename $(notdir $@)).c, $(SOURCES_INI))
-
-
-$(PATH_SUB_LIB)%.a: %.h $(foreach hdr,$(patsubst \#include"%",%, \
-  $(patsubst \#include<%>,%,$(filter \#include<%> \#include"%", \
-  $(shell cat $<)))), $(PATH_SUB_LIB)$(hdr:.h=.o))
+$(PATH_SUB_LIB)%.a: %.h $$(foreach hdr,$$(patsubst robolib/$$(PERCENT),$$(PERCENT), $$(patsubst $$(HASHTAG)include$$(QUOTE)$$(PERCENT)$$(QUOTE),$$(PERCENT), \
+  $$(patsubst $$(HASHTAG)include<$$(PERCENT)>,$$(PERCENT),$$(filter $$(HASHTAG)include<$$(PERCENT)> $$(HASHTAG)include$$(QUOTE)$$(PERCENT)$$(QUOTE), \
+  $$(shell cat $$*.ini))))), $(PATH_SUB_LIB)$$(hdr$$(COLON).h=.o))
 	@echo
-	@echo "####" compress archiv \"$@\" based on ...
-	touch $@
-	echo "sources:" $(filter-out $<,$?)
-
-
-$(PATH_SUB_LIB)%.o: $(wildcard $(PATH_ROBOLIB_SRC)%/*)
+	@echo "$(foreach hdr,$(patsubst robolib/%,%, $(patsubst #include"%",%, \
+  $(patsubst #include<%>,%,$(filter #include<%> #include"%", \
+  $(shell cat $*.ini))))), $(PATH_SUB_LIB)$(hdr:.h=.o))"
+	@echo "$(foreach hdr, $(shell cat $*.txt), $(PATH_SUB_LIB)$(hdr:.h=.o))"
 	@echo
-	@echo "####" compiling \"$@\" based on $?
-	touch $@
+	@echo "####" compress archiv \"$@\"
+	avr-ar rs $@ $(filter-out $<,$?)
 
-
+$(PATH_SUB_LIB)%.o: $$(wildcard $$(PATH_ROBOLIB_SRC)$$(basename $$*)/*.c)
+	@echo
+	@echo "####" compiling \"$@\" based on $(PATH_SUB_SRC)$*/$*.c
+	@mkdir -p $(@D)
+	avr-gcc -o $@ -c $(CFLAGS) $(CFLAGS_INCLUDE_INI) $(filter %$*.c,$?)
 
 %.h: %.ini
 	@echo
