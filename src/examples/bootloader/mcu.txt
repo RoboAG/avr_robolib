@@ -1,2 +1,3 @@
 atmega64
+atmega644p
 atmega2561

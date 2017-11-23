@@ -14,7 +14,7 @@
 #include <inttypes.h>
 
 // include all necessary headers from robolib
-#include "tick_header.h"
+#include "tick.h"
 
 int main (void) {
   // initialize robolib

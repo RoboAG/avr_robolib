@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.2.1                                                              #
-# Date   : 10.11.17                                                           #
+# Version: 1.2.2                                                              #
+# Date   : 23.11.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -13,7 +13,7 @@
 
 NAME_GIT_THIS=robolib
 
-SUBDIRS = bin tags doc
+SUBDIRS = src tags doc bin
 
 ###############################################################################
 # define phony targets for make commands

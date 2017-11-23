@@ -14,7 +14,7 @@
 #include <inttypes.h>
 
 // include all necessary headers from robolib
-#include "display_header.h"
+#include "display.h"
 
 int main (void) {
   // initialize robolib
@@ -73,7 +73,7 @@ int main (void) {
 *                                                                             *
 * 1. adjust Makefile                              (only needed once)          *
 *   + set "MCU" to the controller type              (e.g. atmega64)           *
-*   + set "PATH_LIB" to the library                 (e.g. ~/avr/robolib)       *
+*   + set "PATH_LIB" to the library                 (e.g. ~/avr/robolib)      *
 *                                                                             *
 * 2. compile library and create headerfile        (only needed once)          *
 *   + open a console                                (e.g. strg+alt+t)         *

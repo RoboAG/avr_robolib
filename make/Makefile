@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.3                                                              #
-# Date   : 15.11.17                                                           #
+# Version: 1.5.4                                                              #
+# Date   : 23.11.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -104,23 +104,23 @@ DATA_BIN       = bin/data.py
 # get current directory of this makefile
 PATH_MAKE = $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))/
 ifneq ($(DEBUG),)
-  $(info Makefile dir: $(PATH_MAKE))
+    $(info Makefile dir: $(PATH_MAKE))
 endif
 
 # get working directory (for opening a new console - ..._IN_NEW_TERMINAL)
 PATH_CUR = $(shell pwd)/
 ifneq ($(DEBUG),)
-  $(info current dir: $(PATH_CUR))
+    $(info current dir: $(PATH_CUR))
 endif
 
 # get directory of robolib
 ifeq (,$(PATH_ROBOLIB))
-  PATH_ROBOLIB_INTERNAL = $(patsubst %/,%,$(abspath $(PATH_MAKE)../))/
+    PATH_ROBOLIB_INTERNAL = $(patsubst %/,%,$(abspath $(PATH_MAKE)../))/
 else
-  PATH_ROBOLIB_INTERNAL = $(patsubst %/,%,$(abspath $(PATH_ROBOLIB)))/
+    PATH_ROBOLIB_INTERNAL = $(patsubst %/,%,$(abspath $(PATH_ROBOLIB)))/
 endif
 ifneq ($(DEBUG),)
-  $(info robolib dir: $(PATH_ROBOLIB_INTERNAL))
+    $(info robolib dir: $(PATH_ROBOLIB_INTERNAL))
 endif
 
 # set subdirectories of robolib
@@ -131,7 +131,7 @@ PATH_ROBOLIB_SRC = $(PATH_ROBOLIB_INTERNAL)$(PATH_SUB_SRC)
 # name of downloader
 DOWNLOADER = $(PATH_ROBOLIB_INTERNAL)$(DOWNLOADER_BIN)
 # downloader options
-DOWNLOADER_OPTIONS = -I $(OUTPUT).hex -v -p $(MCU)                            \
+DOWNLOADER_OPTIONS = -I $(OUTPUT).hex -v -p $(MCU) \
   -P $(COMPORT_PROG_INTERNAL) -b $(BAUDRATE_PROG) $(RESET_SEQUENCE)
 
 # name of terminal
@@ -141,12 +141,12 @@ DATA_OPTIONS = $(COMPORT_DATA_INTERNAL) $(BAUDRATE_DATA)
 
 # name of downloader (avrdude)
 ifeq ($(SUDO_AVRDUDE),)
-  AVRDUDE = avrdude
+    AVRDUDE = avrdude
 else
-  AVRDUDE = sudo avrdude
+    AVRDUDE = sudo avrdude
 endif
 # downloader options
-AVRDUDE_OPTIONS = -v -p $(MCU) -P $(COMPORT_AVRDUDE) -c AVRISP2               \
+AVRDUDE_OPTIONS = -v -p $(MCU) -P $(COMPORT_AVRDUDE) -c AVRISP2 \
   -B $(BAUDRATE_AVRDUDE) -e -U flash:w:$(OUTPUT).hex
 
 ###############################################################################
@@ -154,123 +154,122 @@ AVRDUDE_OPTIONS = -v -p $(MCU) -P $(COMPORT_AVRDUDE) -c AVRISP2               \
 
 # check for terminal (for opening a new console - ..._IN_NEW_TERMINAL)
 ifneq (,$(FORCE_TERMINAL))
-  TERM = "$(FORCE_TERMINAL)"
+    TERM = "$(FORCE_TERMINAL)"
 else
-  ifeq (,$(KATE))
-    temp_term = "no_term_needed"
-  endif
-  ifeq (,$(temp_term))
-    ifneq (,$(shell which gnome-terminal))
-      TERM = "gnome-terminal"
-    else
-      ifneq (,$(shell which xfce4-terminal))
-        TERM = "xfce4-terminal"
-      else
-        ifneq (,$(shell which konsole))
-          TERM = "konsole"
-        else
-          TERM = "xterm"
-        endif
-      endif
+    ifeq (,$(KATE))
+        TERM_INTERNAL= no terminal needed
     endif
-  endif
+    ifeq (,$(TERM_INTERNAL))
+        ifneq (,$(shell which gnome-terminal))
+            TERM_INTERNAL= gnome-terminal
+        else
+            ifneq (,$(shell which xfce4-terminal))
+                TERM_INTERNAL= xfce4-terminal
+            else
+                ifneq (,$(shell which konsole))
+                    TERM_INTERNAL= konsole
+                else
+                    TERM_INTERNAL= xterm
+                endif
+            endif
+        endif
+    endif
 endif
 ifneq ($(DEBUG),)
-  $(info terminal: $(TERM))
+    $(info terminal: $(TERM_INTERNAL))
 endif
 
 # special options - find a valid comport if none is given
 ifeq (,$(COMPORT_PROG))
-  COMPORT_PROG_INTERNAL = $(firstword $(wildcard /dev/ttyUSB*))
-  ifeq (,$(COMPORT_PROG_INTERNAL))
-    COMPORT_PROG_INTERNAL = $(firstword $(wildcard /dev/ttyS*))
-  endif
+    COMPORT_PROG_INTERNAL = $(firstword $(wildcard /dev/ttyUSB*))
+    ifeq (,$(COMPORT_PROG_INTERNAL))
+        COMPORT_PROG_INTERNAL = $(firstword $(wildcard /dev/ttyS*))
+    endif
 else
-  COMPORT_PROG_INTERNAL = $(COMPORT_PROG)
+    COMPORT_PROG_INTERNAL = $(COMPORT_PROG)
 endif
 ifneq ($(DEBUG),)
-  $(info comport prog: $(COMPORT_PROG_INTERNAL))
+    $(info comport prog: $(COMPORT_PROG_INTERNAL))
 endif
 
 ifeq (,$(COMPORT_DATA))
-  COMPORT_DATA_INTERNAL = $(firstword $(wildcard /dev/ttyUSB*))
-  ifeq (,$(COMPORT_DATA_INTERNAL))
-    COMPORT_DATA_INTERNAL = $(firstword $(wildcard /dev/ttyS*))
-  endif
+    COMPORT_DATA_INTERNAL = $(firstword $(wildcard /dev/ttyUSB*))
+    ifeq (,$(COMPORT_DATA_INTERNAL))
+        COMPORT_DATA_INTERNAL = $(firstword $(wildcard /dev/ttyS*))
+    endif
 else
-  COMPORT_DATA_INTERNAL = $(COMPORT_DATA)
+    COMPORT_DATA_INTERNAL = $(COMPORT_DATA)
 endif
 ifneq ($(DEBUG),)
-  $(info comport data: $(COMPORT_DATA_INTERNAL))
+    $(info comport data: $(COMPORT_DATA_INTERNAL))
 endif
 
 ###############################################################################
 # output, source-files, object-files
 # name of output file
 ifeq (,$(TARGET))
-  OUTPUT = out
+    OUTPUT = out
 else
-  OUTPUT = $(TARGET)
+    OUTPUT = $(TARGET)
 endif
 ifneq ($(DEBUG),)
-  $(info output file: $(OUTPUT))
+    $(info output file: $(OUTPUT))
 endif
 
 # source file(s)
 ifneq (,$(TARGET))
-  SRC = $(TARGET).c
+    SRC = $(TARGET).c
 else
-  # main directory for sourcefiles
-  PATH_SOURCE = ./
-  # search for subdirectories
-  PATH_SOURCE+= $(filter-out $(PATH_SUB_TMP) $(PATH_SUB_DATA) \
-    $(PATH_SUB_LIB), $(filter %/,$(wildcard */)))
+    # main directory for sourcefiles
+    PATH_SOURCE = ./
+    # search for subdirectories
+    PATH_SOURCE+= $(filter-out $(PATH_SUB_TMP) $(PATH_SUB_DATA) \
+      $(PATH_SUB_LIB), $(filter %/,$(wildcard */)))
 
-  # list of all source files within found paths
-  SRC  = $(patsubst ./%,%,$(wildcard $(foreach dir,$(PATH_SOURCE), $(dir)*.c)))
+    # list of all source files within found paths
+    SRC  = $(patsubst ./%,%,$(wildcard $(foreach dir,$(PATH_SOURCE), $(dir)*.c)))
 endif
 ifneq ($(DEBUG),)
-  $(info source files: $(SRC))
+    $(info source files: $(SRC))
 endif
 
 # list of object files
 OBJ  = $(foreach source,$(basename $(SRC)),$(PATH_SUB_TMP)$(source).o)
 ifneq ($(DEBUG),)
-  $(info object files: $(OBJ))
+    $(info object files: $(OBJ))
 endif
 
 ###############################################################################
-# ini-files and libraries
+# archives (libraries)
 
 # list of files for "ini" compilation
 INI_FILES = $(wildcard *.ini)
 ifneq ($(DEBUG),)
-  $(info ini files: $(INI_FILES))
+    $(info ini files: $(INI_FILES))
 endif
 
 # list of headers and libraries to be created by "ini" compilation
 HDR_INI = $(INI_FILES:.ini=.h)
 LIB_INI = $(foreach lib,$(INI_FILES:.ini=.a),$(PATH_SUB_LIB)$(lib))
 ifneq ($(DEBUG),)
-  $(info libs from ini: $(LIB_INI))
+    $(info libs from ini: $(LIB_INI))
 endif
 
-# list of archives for "normal" project linking and all archives
-LIB_BEFORE = $(wildcard $(PATH_SUB_LIB)*.a)
-LIB_ALL = $(sort $(LIB_BEFORE) $(LIB_INI))
-ifneq ($(DEBUG),)
-  $(info all libs: $(LIB_ALL))
-endif
-
-###############################################################################
 # pololu
-
 ifneq ($(strip $(POLOLU)),)
-  POLOLU_LIB = $(PATH_MAKE)../../pololu/libpololu_$(MCU).a
+    LIB_POLOLU = $(PATH_MAKE)../../pololu/libpololu_$(MCU).a
 
-  POLOLU_HEADER = $(PATH_MAKE)../../pololu/src/
-  #POLOLU_HEADER = $(PATH_MAKE)../../pololu/pololu/
-  #POLOLU_HEADER2 = $(PATH_MAKE)../../pololu/src/
+    HDR_POLOLU = $(PATH_MAKE)../../pololu/src/
+    #HDR_POLOLU = $(PATH_MAKE)../../pololu/pololu/
+endif
+
+# archives before
+LIB_BEFORE = $(filter-out $(LIB_INI),$(wildcard $(PATH_SUB_LIB)*.a))
+
+# list of all archives
+LIB_ALL = $(sort $(LIB_BEFORE) $(LIB_INI) $(LIB_POLOLU))
+ifneq ($(DEBUG),)
+    $(info all libs: $(LIB_ALL))
 endif
 
 ###############################################################################
@@ -295,6 +294,8 @@ ifneq ($(POLOLU_HEADER),)
 CFLAGS += -I "$(POLOLU_HEADER)"
 endif
 
+CFLAGS_INCLUDE_INI = $(foreach hdr,$(HDR_INI),-include "$(hdr)")
+
 ###############################################################################
 # ignore implicit chain and therefore deletion of object files
 #.SECONDARY: $(OBJECTS_NORMAL)
@@ -308,7 +309,8 @@ QUOTE="
 COLON=:
 
 # define phony targets for make commands
-.PHONY: all all_init   ini ini_init   program avrdude   data   clean
+.PHONY: all all_init   ini ini_init   program download avrdude   data \
+  clean clean_to_store
 
 all: all_init ini $(OUTPUT).hex
 	@echo
@@ -318,114 +320,113 @@ all: all_init ini $(OUTPUT).hex
 
 all_init:
 	@echo
-	@echo "#### compiling project \"make all\""
+	@echo "*** compiling project \"make all\""
 	@echo
 	mkdir -p $(PATH_SUB_TMP)
 
-%.hex: $(PATH_SUB_TMP)%.elf
-	avr-objcopy -O ihex -R .eeprom $< $@
-	avr-objdump -h -S $< > $(PATH_SUB_TMP)$*.lss
-
-%.elf: $(OBJ) $(ARCHIVES_NORMAL)
-	@echo
-	@mkdir -p $(@D)
-	@echo "#### linking project"
-	avr-gcc $(CFLAGS) $(OBJ) $(ARCHIVES_NORMAL) --output $@ $(LDFLAGS)
-
-$(PATH_SUB_TMP)%.o: %.c
-	@echo
-	@mkdir -p $(@D)
-	@echo "#### compiling \"$@\" based on \"$^\""
-	avr-gcc -o $@ -c $(CFLAGS) $(CFLAGS_INCLUDE_INI) -I "$(dir $*)/" $<
-
 ini: ini_init $(LIB_INI) $(HDR_INI)
 	@echo
-ifneq ($(strip $(INI_FILES)),)
-	@echo "#### creating library archive"
-	avr-ar rs $(PATH_SUB_LIB)lib.a $(OBJECTS_INI)
-	rm -f $(foreach file,$(filter-out *.a, $(FILES_CLEAN))                \
-          , $(PATH_SUB_LIB)$(file))
-	@echo
-endif
-	@echo "#### done :-)"
-	@echo
+	@echo "** done :-)"
 
 ini_init:
 	@echo
-	@echo "#### initiating project \"make ini\""
+	@echo "*** initiating project \"make ini\""
 	mkdir -p $(PATH_SUB_LIB)
-
-
-# $(PATH_SUB_LIB)%.o:
-# 	@echo
-# 	@echo "####" compiling \"$@\" based on \"$(filter %/$(basename        \
-#           $(notdir $@)).c, $(SOURCES_INI))\"
-# 	avr-gcc -o $@ -c $(CFLAGS) $(CFLAGS_INCLUDE_INI) $(filter             \
-#           %/$(basename $(notdir $@)).c, $(SOURCES_INI))
 
 clean:
 	@echo
-	@echo "####" cleaning project \"make clean\"
-	-rm -f -R $(foreach file,$(FILES_CLEAN),$(PATH_SUB_LIB)$(file))
-	-rm -f -R $(foreach file,$(FILES_CLEAN),$(PATH_SUB_TMP)$(file))
-	-rm -f -R $(foreach file,$(FILES_CLEAN),$(PATH_SUB_TMP)*/$(file))
+	@echo "*** cleaning project \"make $@\""
+	-rm -f -R $(PATH_SUB_TMP)
+	-rm -f -R $(foreach file,$(FILES_CLEAN),$(file))
+
+clean_to_store:
+	@echo
+	@echo "*** cleaning project \"make $@\""
+	-rm -f -R $(PATH_SUB_LIB)
+	-rm -f -R $(PATH_SUB_TMP)
+	-rm -f -R $(foreach file,$(filter-out *.hex, $(FILES_CLEAN)),$(file))
+	-rm -f -R $(HDR_INI)
 
 program: $(OUTPUT).hex
+
+download:
 	@echo
-	@echo "#### downloading project via downloader \"make program\""
+	@echo "*** downloading project via downloader \"make $@\""
 ifeq (,$(KATE))
 	$(DOWNLOADER) $(DOWNLOADER_OPTIONS)
 else
-	$(TERM) -e "bash -c 'cd $(PATH_CUR) && \
+	$(TERM_INTERNAL) -e "bash -c 'cd $(PATH_CUR) && \
           $(DOWNLOADER) $(DOWNLOADER_OPTIONS); \
           echo; echo \"<press enter to exit>\"; read dummy'"
 endif
 
-avrdude: $(OUTPUT).hex
+avrdude:
 	@echo
-	@echo "#### downloading project via avrdude \"make avrdude\""
+	@echo "*** downloading project via avrdude \"make $@\""
 ifeq (,$(KATE))
 	$(AVRDUDE) $(AVRDUDE_OPTIONS)
 else
-	$(TERM) -e bash "-c 'cd $(PATH_CUR) && \
+	$(TERM_INTERNAL) -e bash "-c 'cd $(PATH_CUR) && \
           $(AVRDUDE) $(AVRDUDE_OPTIONS);  \
           echo; echo \"<press enter to exit>\"; read dummy'"
 endif
 
 data:
 	@echo
-	@echo "####" start python script for communication "make data"
+	@echo "*** start python script for communication \"make $@\""
 	@mkdir -p $(PATH_SUB_DATA)
 ifeq (,$(KATE))
 	@cd $(PATH_SUB_DATA) && $(DATA) $(DATA_OPTIONS)
 	@cd $(PATH_CUR)
 else
-	$(TERM) -e "bash -c 'cd $(PATH_CUR)$(PATH_SUB_DATA) && \
+	$(TERM_INTERNAL) -e "bash -c 'cd $(PATH_CUR)$(PATH_SUB_DATA) && \
           $(DATA) $(DATA_OPTIONS)'"
 endif
 
-
-$(PATH_SUB_LIB)%.a: %.h $$(foreach hdr,$$(patsubst robolib/$$(PERCENT),$$(PERCENT), $$(patsubst $$(HASHTAG)include$$(QUOTE)$$(PERCENT)$$(QUOTE),$$(PERCENT), \
-  $$(patsubst $$(HASHTAG)include<$$(PERCENT)>,$$(PERCENT),$$(filter $$(HASHTAG)include<$$(PERCENT)> $$(HASHTAG)include$$(QUOTE)$$(PERCENT)$$(QUOTE), \
-  $$(shell cat $$*.ini))))), $(PATH_SUB_LIB)$$(hdr$$(COLON).h=.o))
-	@echo
-	@echo "$(foreach hdr,$(patsubst robolib/%,%, $(patsubst #include"%",%, \
-  $(patsubst #include<%>,%,$(filter #include<%> #include"%", \
-  $(shell cat $*.ini))))), $(PATH_SUB_LIB)$(hdr:.h=.o))"
-	@echo "$(foreach hdr, $(shell cat $*.txt), $(PATH_SUB_LIB)$(hdr:.h=.o))"
-	@echo
-	@echo "####" compress archiv \"$@\"
-	avr-ar rs $@ $(filter-out $<,$?)
-
-$(PATH_SUB_LIB)%.o: $$(wildcard $$(PATH_ROBOLIB_SRC)$$(basename $$*)/*.c)
-	@echo
-	@echo "####" compiling \"$@\" based on $(PATH_SUB_SRC)$*/$*.c
-	@mkdir -p $(@D)
-	avr-gcc -o $@ -c $(CFLAGS) $(CFLAGS_INCLUDE_INI) $(filter %$*.c,$?)
+# main path
+%.hex: $(PATH_SUB_TMP)%.elf
+	avr-objcopy -O ihex -R .eeprom $< $@
+	avr-objdump -h -S $< > $(PATH_SUB_TMP)$*.lss
 
 %.h: %.ini
 	@echo
-	@echo "####" creating \"$@\" based on \"$<\"
+	@echo "** creating \"$@\" based on \"$<\""
 	cp $< $@
+
+# subpath tmp
+%.elf: $(OBJ) $(LIB_BEFORE)
+	@echo
+	@mkdir -p $(@D)
+	@echo "*** linking project"
+	avr-gcc $(CFLAGS) $(OBJ) $(LIB_ALL) --output $@ $(LDFLAGS)
+
+$(PATH_SUB_TMP)%.o: %.c
+	@echo
+	@mkdir -p $(@D)
+	@echo "** compiling \"$@\" based on \"$^\""
+	avr-gcc -o $@ -c $(CFLAGS) -I "$(dir $*)/" $<
+
+
+# subpath lib
+call_prerequisite_dot_a = $(foreach hdr,$(patsubst robolib/$(PERCENT), \
+  $(PERCENT), $(patsubst $(HASHTAG)include$(QUOTE)$(PERCENT)$(QUOTE), \
+  $(PERCENT), $(patsubst $(HASHTAG)include<$(PERCENT)>, \
+  $(PERCENT), $(filter $(HASHTAG)include<$(PERCENT)> \
+  $(HASHTAG)include$(QUOTE)$(PERCENT)$(QUOTE), \
+  $(shell cat $*.ini))))), $(PATH_SUB_LIB)$(hdr$(COLON).h=.o))
+$(PATH_SUB_LIB)%.a: %.h $$(call call_prerequisite_dot_a)
+	@echo
+	@echo "*** compress archiv \"$@\""
+	avr-ar rs $@ $(filter-out $<,$?)
+	rm -f $(foreach file,$(filter-out *.a, $(FILES_CLEAN)) \
+	  , $(PATH_SUB_LIB)$(file))
+
+call_prerequisite_dot_o = $(wildcard $(PATH_ROBOLIB_SRC)$(basename $*)/*.c)
+$(PATH_SUB_LIB)%.o: $$(call call_prerequisite_dot_o)
+	@echo
+	@echo "** compiling \"$@\" based on $(PATH_SUB_SRC)$*/$*.c"
+	@mkdir -p $(@D)
+	avr-gcc -o $@ -c $(CFLAGS) $(filter %$*.c,$?) \
+	  $(CFLAGS_INCLUDE_INI) -I $(PATH_ROBOLIB_SRC)
 
 ###############################################################################

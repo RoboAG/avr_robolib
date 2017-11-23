@@ -15,20 +15,32 @@
 #include <avr/io.h>
 
 // include all necessary headers from robolib
-#include "bootloader_header.h"
+#include "bootloader.h"
 
 //**************************[bootloader_start]*********************************
 uint8_t bootloader_start(void) {
 
     // check boot pin
-    DDRG  = 0x00;
-    PORTG = _BV(2);
-    delay_ms(50);
-    if (PING & _BV(2)) {
+    #if ( defined (__AVR_ATmega2561__) || \
+      defined (__AVR_ATmega64__))
+        DDRG  = 0x00;
+        PORTG = _BV(2);
+        delay_ms(50);
+        if (PING & _BV(2)) {
+            PORTG = 0x00;
+            return 0x00;
+        }
         PORTG = 0x00;
-        return 0x00;
-    }
-    PORTG = 0x00;
+    #else
+        DDRB  = 0x00;
+        PORTB = _BV(2);
+        delay_ms(50);
+        if (PINB & _BV(2)) {
+            PORTB = 0x00;
+            return 0x00;
+        }
+        PORTB = 0x00;
+    #endif
 
     uart0_send('~');
 
@@ -99,7 +111,7 @@ uint8_t bootloader_error(void) {
 *                                                                             *
 * 1. adjust Makefile                              (only needed once)          *
 *   + set "MCU" to the controller type              (e.g. atmega64)           *
-*   + set "PATH_LIB" to the library                 (e.g. ~/avr/robolib)       *
+*   + set "PATH_LIB" to the library                 (e.g. ~/avr/robolib)      *
 *   + set "BOOTSTART" to boot adress                (e.g. 0xE000)             *
 *                                                                             *
 * 2. compile library and create headerfile        (only needed once)          *

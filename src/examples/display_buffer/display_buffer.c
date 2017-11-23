@@ -14,7 +14,7 @@
 #include <inttypes.h>
 
 // include all necessary headers from robolib
-#include "display_buffer_header.h"
+#include "display_buffer.h"
 
 int main (void) {
   // initialize robolib

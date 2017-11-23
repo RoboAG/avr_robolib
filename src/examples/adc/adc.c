@@ -14,7 +14,7 @@
 #include <inttypes.h>
 
 // include all necessary headers from robolib
-#include "adc_header.h"
+#include "adc.h"
 
 int main (void) {
   // number of current channel to be measured
