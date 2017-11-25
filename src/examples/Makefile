@@ -3,7 +3,7 @@
 # src/examples/Makefile                                                       #
 # =====================                                                       #
 #                                                                             #
-# Version: 1.1.0                                                              #
+# Version: 1.1.1                                                              #
 # Date   : 23.11.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -16,7 +16,7 @@ MAKEFILE  = ../../../../make/Makefile
 PATH_TEMP = ../../tmp/
 
 # specific paths
-PATH_OUT  = $(PATH_TEMP)robolib/
+PATH_OUT  = $(PATH_TEMP)examples/
 
 # suffix of files to be copied
 SUFFIX = %.c %.ini
