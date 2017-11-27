@@ -1,9 +1,9 @@
 ###############################################################################
 #                                                                             #
-# src/examples/Makefile                                                       #
-# =====================                                                       #
+# src/demos/Makefile                                                          #
+# ==================                                                          #
 #                                                                             #
-# Version: 1.2.0                                                              #
+# Version: 1.0.0                                                              #
 # Date   : 27.11.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -18,25 +18,24 @@ PATH_INC  = ../../include/robolib/
 PATH_SRC  = ../robolib/
 
 # specific paths
-PATH_OUT  = $(PATH_TEMP)examples/
+PATH_OUT  = $(PATH_TEMP)demos/
 
 # suffix of files to be copied
-SUFFIX = %.c %.ini $(*D).mcu
+SUFFIX = %.c %.ini $(notdir $*).mcu
 
 ###############################################################################
 # search for sources (of examples)
-EXAMPLES  = $(patsubst %/,%,$(wildcard */))
-SRC_FILES_EX = $(foreach source, $(EXAMPLES),$(source)/$(source).c)
+DEMOS  = $(patsubst %/,%,$(wildcard */))
+SRC_FILES_DM = $(foreach source, $(DEMOS),$(source)/$(source).c)
 
 # create hex-files based on folder-name and mcu-type (single config-files)
-HEX_FILES_EX = $(foreach source, $(EXAMPLES), $(foreach mcu, \
+HEX_FILES_DM = $(foreach source, $(DEMOS), $(foreach mcu, \
   $(basename $(notdir $(wildcard $(source)/*.mcu))), \
-  $(PATH_OUT)$(mcu)/$(source)/out.hex))
-
+  $(PATH_OUT)$(source)/$(mcu)/out.hex))
 # create hex-files based on folder-name and mcu-type (list of mcu)
-HEX_FILES_EX+= $(foreach source, $(EXAMPLES), \
+HEX_FILES_DM+= $(foreach source, $(DEMOS), \
   $(if $(wildcard $(source)/mcu.txt),$(foreach mcu,$(shell cat \
-  $(source)/mcu.txt), $(PATH_OUT)$(mcu)/$(source)/out.hex)))
+  $(source)/mcu.txt), $(PATH_OUT)$(source)/$(mcu)/out.hex)))
 
 
 # search for sources and headers of library (for dependencies)
@@ -48,6 +47,8 @@ HEADERS_LIB = $(wildcard $(PATH_INC)*.h)
 .PHONY: all all_init clean
 # ignore implicit chain and therefore deletion of object files
 .SECONDARY:
+#%.c %.ini %.txt
+#$(SOURCE_FILES_COPY) $(INI_FILES_COPY)
 # secondary expansion to allow usage of more complex rules
 .SECONDEXPANSION:
 # wrape percentage symbol
@@ -55,35 +56,34 @@ PERCENT=%
 SEMICOLON=;
 HASHTAG=\#
 
-all: all_init $(HEX_FILES_EX)
+all: all_init $(HEX_FILES_DM)
 
 
 all_init:
 	@echo
-	@echo "### compiling examples ###"
+	@echo "### compiling demos ###"
 
 clean:
 	@echo
-	@echo "### clean examples ###"
+	@echo "### clean demos ###"
 	rm -f *.o *.hex *.obj *.elf *.lss *.lst *.map *.sym
 	rm -rf $(PATH_OUT)
 
 call_prerequisite_dot_hex = $(foreach file,$(strip $(filter $(SUFFIX), \
-  $(notdir $(wildcard $(notdir $*)/*)))), $(PATH_OUT)$*/$(file))
+  $(notdir $(wildcard $(dir $*)*)))), $(PATH_OUT)$*/$(file))
 $(PATH_OUT)%/out.hex: $$(call call_prerequisite_dot_hex) \
   $(SOURCES_LIB) $(HEADERS_LIB)
 	@echo
-	@echo "## compiling $(notdir $*) for $(*D)"
+	@echo "## compiling $(*D) for $(notdir $*)"
 	$(MAKE) -C $(@D) -f $(MAKEFILE) \
-	  $(if $(wildcard $(PATH_OUT)$*/$(*D).mcu), \
-	  $(shell cat $(PATH_OUT)$*/$(*D).mcu), \
-	  MCU=$(*D))
+	  $(if $(wildcard $(PATH_OUT)$*/$(notdir $*).mcu), \
+	  $(shell cat $(PATH_OUT)$*/$(notdir $*).mcu), \
+	  MCU=$(notdir $*))
 
-
-call_prerequisite_other = $(wildcard $(notdir $(*D))/$(notdir $@))
+call_prerequisite_other = $(wildcard $(dir $(*D))$(notdir $@))
 call_recipe_other = \
 @if [ "" != "$<" ]$(SEMICOLON) then \
-    echo "$(HASHTAG) copy $(notdir $<) for $(patsubst $(PERCENT)/,$(PERCENT),$(dir $(*D)))" $(SEMICOLON)\
+    echo "$(HASHTAG) copy $(notdir $<) for $(notdir $(*D))" $(SEMICOLON)\
     mkdir -p $(@D)$(SEMICOLON) \
     cp $< $@$(SEMICOLON) \
 else \
