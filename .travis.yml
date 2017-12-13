@@ -1,0 +1,18 @@
+language: C
+sudo: required
+
+before_install:
+before_script:
+script:
+  - make install_prerequisites
+  - make download_additionals
+  - make
+
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: doc/html/
+  repo: robolib_doc
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  on:
+    branch: master
