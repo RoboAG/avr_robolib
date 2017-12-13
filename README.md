@@ -13,7 +13,7 @@ Download this Repository
     git clone https://github.com/peterweissig/robolib.git
 
 
-Install packages ([see also here](bin/install_prerequisites.sh) :
+Install packages ([see also here](bin/install_prerequisites.sh)) :
 
     cd robolib
     make install_prerequisites
