@@ -1,6 +1,7 @@
 .svn/
-tmp/
-
 .directory
+
+tmp/
+data/
 
 todo.txt
