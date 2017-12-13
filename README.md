@@ -1,5 +1,13 @@
-# robolib
+# robolib 
 Library for using simple avr-controller - especially made for [keplerboard](https://github.com/peterweissig/eagle_keplerboard).
+
+[![Build Status](https://travis-ci.org/peterweissig/robolib.svg?branch=master)](https://travis-ci.org/peterweissig/robolib)
+
+## Test library and build documentaion
+
+    cd robolib
+    make
+
 
 ## Setup for linux (Ubuntu)
 
@@ -28,9 +36,4 @@ Download binaries:
 Settings:
 
     sudo adduser $USER dialout
-
-
-## Test library and build documentaion
-
-    #cd robolib
-    make
+    
