@@ -3,8 +3,8 @@
 # bin/Makefile                                                                #
 # ============                                                                #
 #                                                                             #
-# Version: 1.0.0                                                              #
-# Date   : 06.11.17                                                           #
+# Version: 1.0.1                                                              #
+# Date   : 13.12.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -33,13 +33,15 @@ PATH_CUR = $(shell pwd)/
 
 ###############################################################################
 # define phony targets for make commands
-.PHONY: all additionals clean update build
+.PHONY: all build clean \
+        download_additionals install_prerequisites \
+        update
 # "downloader" and "xbee" are not phony
 # (those targets should be created, only if they do not exist)
 
-all: build
 
-additionals: $(DEST_DL) $(DEST_XBEE)
+# build specific commands
+all: build
 
 build:
 	@echo
@@ -49,7 +51,7 @@ ifneq ($(firstword $(wildcard $(PATH_DL) $(PATH_XBEE))),)
 	-$(MAKE) -C $(PATH_XBEE)
 else
 	@echo "# no additional binaries #"
-	@echo "  use: \$$ make additionals"
+	@echo "  use: \$$ make download_additionals"
 endif
 
 clean:
@@ -60,6 +62,15 @@ ifneq ($(firstword $(wildcard $(PATH_DL) $(PATH_XBEE))),)
 	-$(MAKE) -C $(PATH_XBEE) clean
 endif
 
+
+# install and download commands
+install_prerequisites:
+	./install_prerequisites.sh
+
+download_additionals: $(DEST_DL) $(DEST_XBEE)
+
+
+# git specific commands
 update:
 	@echo
 ifneq ($(firstword $(wildcard $(PATH_DL) $(PATH_XBEE))),)
@@ -71,6 +82,7 @@ else
 	@echo "  use: \$$ make additionals"
 endif
 
+# real targets (not .PHONY)
 $(DEST_DL): $(PATH_DL_BIN)
 	@echo "# create softlink for downloader #"
 	-ln -s $(PATH_DL_BIN) $(DEST_DL)

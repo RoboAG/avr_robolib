@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.2.2                                                              #
-# Date   : 23.11.17                                                           #
+# Version: 1.2.3                                                              #
+# Date   : 13.12.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -17,9 +17,12 @@ SUBDIRS = src tags doc bin
 
 ###############################################################################
 # define phony targets for make commands
-.PHONY: all all_init warn  $(SUBDIRS)  additionals  clean \
+.PHONY: all all_init warn  $(SUBDIRS) clean \
+        install_prerequisites download_additionals \
         update status push pull
 
+
+# build specific commands
 all: all_init $(SUBDIRS)
 
 all_init:
@@ -34,11 +37,6 @@ warn:
 $(SUBDIRS):
 	$(MAKE) -C $@
 
-
-additionals:
-	$(MAKE) -C bin/ additionals
-
-
 clean:
 	@echo
 	@echo "### clean $(NAME_GIT_THIS) ###"
@@ -47,6 +45,15 @@ clean:
 	done
 
 
+# install and download commands
+install_prerequisites:
+	./install_prerequisites.sh
+
+download_additionals:
+	$(MAKE) -C bin/ download_additionals
+
+
+# git specific commands
 update: pull
 	$(MAKE) -C bin/ update
 
