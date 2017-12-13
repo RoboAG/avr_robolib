@@ -3,8 +3,8 @@
 # src/examples/Makefile                                                       #
 # =====================                                                       #
 #                                                                             #
-# Version: 1.2.0                                                              #
-# Date   : 27.11.17                                                           #
+# Version: 1.2.1                                                              #
+# Date   : 13.12.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -75,9 +75,9 @@ $(PATH_OUT)%/out.hex: $$(call call_prerequisite_dot_hex) \
 	@echo
 	@echo "## compiling $(notdir $*) for $(*D)"
 	$(MAKE) -C $(@D) -f $(MAKEFILE) \
-	  $(if $(wildcard $(PATH_OUT)$*/$(*D).mcu), \
-	  $(shell cat $(PATH_OUT)$*/$(*D).mcu), \
-	  MCU=$(*D))
+	  $(shell if [ -e "$(PATH_OUT)$*/$(*D).mcu" ]; then \
+	  cat $(PATH_OUT)$*/$(*D).mcu; \
+	  else echo "MCU=$(*D)"; fi)
 
 
 call_prerequisite_other = $(wildcard $(notdir $(*D))/$(notdir $@))
