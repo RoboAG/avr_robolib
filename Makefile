@@ -3,7 +3,7 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.2.3                                                              #
+# Version: 1.2.4                                                              #
 # Date   : 13.12.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -47,7 +47,7 @@ clean:
 
 # install and download commands
 install_prerequisites:
-	./install_prerequisites.sh
+	$(MAKE) -C bin/ install_prerequisites
 
 download_additionals:
 	$(MAKE) -C bin/ download_additionals
