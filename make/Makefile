@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.4                                                              #
-# Date   : 23.11.17                                                           #
+# Version: 1.5.5                                                              #
+# Date   : 14.12.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -81,6 +81,11 @@ FORCE_TERMINAL =
 # Otherwise additional output will be generated.
 DEBUG =
 
+# Flag for turning off the auto loading of *.make files.
+# If not set (""), this Makefile looks for a *.make file and calls itself
+# with all parameters from the *.make files.
+NO_AUTO =
+
 ###############################################################################
 # local directories
 PATH_SUB_TMP  = tmp/
@@ -102,13 +107,13 @@ DATA_BIN       = bin/data.py
 # important paths
 
 # get current directory of this makefile
-PATH_MAKE = $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))/
+PATH_MAKE:= $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))/
 ifneq ($(DEBUG),)
     $(info Makefile dir: $(PATH_MAKE))
 endif
 
 # get working directory (for opening a new console - ..._IN_NEW_TERMINAL)
-PATH_CUR = $(shell pwd)/
+PATH_CUR:= $(shell pwd)/
 ifneq ($(DEBUG),)
     $(info current dir: $(PATH_CUR))
 endif
@@ -128,6 +133,24 @@ PATH_ROBOLIB_INC = $(PATH_ROBOLIB_INTERNAL)$(PATH_SUB_INC)
 PATH_ROBOLIB_SRC = $(PATH_ROBOLIB_INTERNAL)$(PATH_SUB_SRC)
 
 ###############################################################################
+# auto loading of *.make
+
+ifeq ($(NO_AUTO),)
+    ifneq ($(wildcard *.mcu),)
+        AUTOLOAD_FILE:= $(firstword $(wildcard *.mcu))
+        AUTOLOAD_MCU  = $(patsubst %.mcu, %, $(AUTOLOAD_FILE))
+        AUTOLOAD_ARGS:= $(shell cat $(AUTOLOAD_FILE))
+        ifneq ($(DEBUG),)
+            $(info auto-loading File: $(AUTOLOAD_FILE))
+            $(info auto-loading MCU : $(AUTOLOAD_MCU))
+            $(info auto-loading ARGS: $(AUTOLOAD_ARGS))
+        endif
+        include $(PATH_CUR)$(AUTOLOAD_FILE)
+        MCU = $(AUTOLOAD_MCU)
+    endif
+endif
+
+###############################################################################
 # name of downloader
 DOWNLOADER = $(PATH_ROBOLIB_INTERNAL)$(DOWNLOADER_BIN)
 # downloader options
@@ -137,7 +160,7 @@ DOWNLOADER_OPTIONS = -I $(OUTPUT).hex -v -p $(MCU) \
 # name of terminal
 DATA = python $(PATH_ROBOLIB_INTERNAL)$(DATA_BIN)
 # terminal options
-DATA_OPTIONS = $(COMPORT_DATA_INTERNAL) $(BAUDRATE_DATA)
+DATA_OPTIONS = "$(COMPORT_DATA_INTERNAL)" "$(BAUDRATE_DATA)"
 
 # name of downloader (avrdude)
 ifeq ($(SUDO_AVRDUDE),)
@@ -154,22 +177,22 @@ AVRDUDE_OPTIONS = -v -p $(MCU) -P $(COMPORT_AVRDUDE) -c AVRISP2 \
 
 # check for terminal (for opening a new console - ..._IN_NEW_TERMINAL)
 ifneq (,$(FORCE_TERMINAL))
-    TERM = "$(FORCE_TERMINAL)"
+    TERM:= "$(FORCE_TERMINAL)"
 else
     ifeq (,$(KATE))
-        TERM_INTERNAL= no terminal needed
+        TERM_INTERNAL = no terminal needed
     endif
     ifeq (,$(TERM_INTERNAL))
         ifneq (,$(shell which gnome-terminal))
-            TERM_INTERNAL= gnome-terminal
+            TERM_INTERNAL = gnome-terminal
         else
             ifneq (,$(shell which xfce4-terminal))
-                TERM_INTERNAL= xfce4-terminal
+                TERM_INTERNAL = xfce4-terminal
             else
                 ifneq (,$(shell which konsole))
-                    TERM_INTERNAL= konsole
+                    TERM_INTERNAL = konsole
                 else
-                    TERM_INTERNAL= xterm
+                    TERM_INTERNAL = xterm
                 endif
             endif
         endif
@@ -181,24 +204,24 @@ endif
 
 # special options - find a valid comport if none is given
 ifeq (,$(COMPORT_PROG))
-    COMPORT_PROG_INTERNAL = $(firstword $(wildcard /dev/ttyUSB*))
+    COMPORT_PROG_INTERNAL:= $(firstword $(wildcard /dev/ttyUSB*))
     ifeq (,$(COMPORT_PROG_INTERNAL))
-        COMPORT_PROG_INTERNAL = $(firstword $(wildcard /dev/ttyS*))
+        COMPORT_PROG_INTERNAL:= $(firstword $(wildcard /dev/ttyS*))
     endif
 else
-    COMPORT_PROG_INTERNAL = $(COMPORT_PROG)
+    COMPORT_PROG_INTERNAL:= $(COMPORT_PROG)
 endif
 ifneq ($(DEBUG),)
     $(info comport prog: $(COMPORT_PROG_INTERNAL))
 endif
 
 ifeq (,$(COMPORT_DATA))
-    COMPORT_DATA_INTERNAL = $(firstword $(wildcard /dev/ttyUSB*))
+    COMPORT_DATA_INTERNAL:= $(firstword $(wildcard /dev/ttyUSB*))
     ifeq (,$(COMPORT_DATA_INTERNAL))
-        COMPORT_DATA_INTERNAL = $(firstword $(wildcard /dev/ttyS*))
+        COMPORT_DATA_INTERNAL:= $(firstword $(wildcard /dev/ttyS*))
     endif
 else
-    COMPORT_DATA_INTERNAL = $(COMPORT_DATA)
+    COMPORT_DATA_INTERNAL:= $(COMPORT_DATA)
 endif
 ifneq ($(DEBUG),)
     $(info comport data: $(COMPORT_DATA_INTERNAL))
@@ -221,20 +244,20 @@ ifneq (,$(TARGET))
     SRC = $(TARGET).c
 else
     # main directory for sourcefiles
-    PATH_SOURCE = ./
+    PATH_SOURCE:= ./
     # search for subdirectories
     PATH_SOURCE+= $(filter-out $(PATH_SUB_TMP) $(PATH_SUB_DATA) \
       $(PATH_SUB_LIB), $(filter %/,$(wildcard */)))
 
     # list of all source files within found paths
-    SRC  = $(patsubst ./%,%,$(wildcard $(foreach dir,$(PATH_SOURCE), $(dir)*.c)))
+    SRC:= $(patsubst ./%,%,$(wildcard $(foreach dir,$(PATH_SOURCE), $(dir)*.c)))
 endif
 ifneq ($(DEBUG),)
     $(info source files: $(SRC))
 endif
 
 # list of object files
-OBJ  = $(foreach source,$(basename $(SRC)),$(PATH_SUB_TMP)$(source).o)
+OBJ:= $(foreach source,$(basename $(SRC)),$(PATH_SUB_TMP)$(source).o)
 ifneq ($(DEBUG),)
     $(info object files: $(OBJ))
 endif
@@ -243,7 +266,7 @@ endif
 # archives (libraries)
 
 # list of files for "ini" compilation
-INI_FILES = $(wildcard *.ini)
+INI_FILES:= $(wildcard *.ini)
 ifneq ($(DEBUG),)
     $(info ini files: $(INI_FILES))
 endif
@@ -257,17 +280,17 @@ endif
 
 # pololu
 ifneq ($(strip $(POLOLU)),)
-    LIB_POLOLU = $(PATH_MAKE)../../pololu/libpololu_$(MCU).a
+    LIB_POLOLU:= $(PATH_MAKE)../../pololu/libpololu_$(MCU).a
 
-    HDR_POLOLU = $(PATH_MAKE)../../pololu/src/
+    HDR_POLOLU:= $(PATH_MAKE)../../pololu/src/
     #HDR_POLOLU = $(PATH_MAKE)../../pololu/pololu/
 endif
 
 # archives before
-LIB_BEFORE = $(filter-out $(LIB_INI),$(wildcard $(PATH_SUB_LIB)*.a))
+LIB_BEFORE:= $(filter-out $(LIB_INI),$(wildcard $(PATH_SUB_LIB)*.a))
 
 # list of all archives
-LIB_ALL = $(sort $(LIB_BEFORE) $(LIB_INI) $(LIB_POLOLU))
+LIB_ALL:= $(sort $(LIB_BEFORE) $(LIB_INI) $(LIB_POLOLU))
 ifneq ($(DEBUG),)
     $(info all libs: $(LIB_ALL))
 endif
@@ -275,7 +298,7 @@ endif
 ###############################################################################
 # compiler and linker flags
 
-CFLAGS  = -mmcu=$(MCU) -I. -I "$(PATH_ROBOLIB_INC)"
+CFLAGS  = -mmcu=$(strip $(MCU)) -I. -I "$(PATH_ROBOLIB_INC)"
 CFLAGS += -gstabs -Os -funsigned-char -funsigned-bitfields
 CFLAGS += -fpack-struct -fshort-enums
 CFLAGS += -Wall -Wstrict-prototypes -std=gnu99
@@ -294,11 +317,11 @@ ifneq ($(POLOLU_HEADER),)
 CFLAGS += -I "$(POLOLU_HEADER)"
 endif
 
-CFLAGS_INCLUDE_INI = $(foreach hdr,$(HDR_INI),-include "$(hdr)")
+CFLAGS_INCLUDE_INI:= $(foreach hdr,$(HDR_INI),-include "$(hdr)")
 
 ###############################################################################
-# ignore implicit chain and therefore deletion of object files
-#.SECONDARY: $(OBJECTS_NORMAL)
+# ignore implicit chain and therefore deletion of hex-file
+.SECONDARY: $(OUTPUT).hex
 
 # allow second expansion for complex rules
 .SECONDEXPANSION:
@@ -309,45 +332,48 @@ QUOTE="
 COLON=:
 
 # define phony targets for make commands
-.PHONY: all all_init   ini ini_init   program download avrdude   data \
-  clean clean_to_store
+.PHONY: all   ini ini_init   build build_init   clean_simple clean \
+  download avrdude   data
 
-all: all_init ini $(OUTPUT).hex
+
+all: ini build
 	@echo
-	@avr-size -A $(PATH_SUB_TMP)$(OUTPUT).elf
+	@echo "All done :-)"
+
+
+build: build_init $(OUTPUT).hex
 	@echo
 	@echo Compilation done - No Errors.
 
-all_init:
+build_init:
 	@echo
-	@echo "*** compiling project \"make all\""
+	@echo "*** compiling project \"make build\""
 	@echo
 	mkdir -p $(PATH_SUB_TMP)
 
+
 ini: ini_init $(LIB_INI) $(HDR_INI)
-	@echo
-	@echo "** done :-)"
 
 ini_init:
 	@echo
 	@echo "*** initiating project \"make ini\""
 	mkdir -p $(PATH_SUB_LIB)
 
-clean:
+
+clean_simple:
 	@echo
 	@echo "*** cleaning project \"make $@\""
 	-rm -f -R $(PATH_SUB_TMP)
-	-rm -f -R $(foreach file,$(FILES_CLEAN),$(file))
+	-rm -f -R $(FILES_CLEAN)
 
-clean_to_store:
+clean:
 	@echo
 	@echo "*** cleaning project \"make $@\""
 	-rm -f -R $(PATH_SUB_LIB)
 	-rm -f -R $(PATH_SUB_TMP)
-	-rm -f -R $(foreach file,$(filter-out *.hex, $(FILES_CLEAN)),$(file))
+	-rm -f -R $(filter-out *.hex, $(FILES_CLEAN))
 	-rm -f -R $(HDR_INI)
 
-program: $(OUTPUT).hex
 
 download:
 	@echo
@@ -366,7 +392,7 @@ avrdude:
 ifeq (,$(KATE))
 	$(AVRDUDE) $(AVRDUDE_OPTIONS)
 else
-	$(TERM_INTERNAL) -e bash "-c 'cd $(PATH_CUR) && \
+	$(TERM_INTERNAL) -e "bash -c 'cd $(PATH_CUR) && \
           $(AVRDUDE) $(AVRDUDE_OPTIONS);  \
           echo; echo \"<press enter to exit>\"; read dummy'"
 endif
@@ -399,6 +425,8 @@ endif
 	@mkdir -p $(@D)
 	@echo "*** linking project"
 	avr-gcc $(CFLAGS) $(OBJ) $(LIB_ALL) --output $@ $(LDFLAGS)
+	@echo
+	@avr-size -A $(PATH_SUB_TMP)$(OUTPUT).elf
 
 $(PATH_SUB_TMP)%.o: %.c
 	@echo
@@ -416,7 +444,7 @@ call_prerequisite_dot_a = $(foreach hdr,$(patsubst robolib/$(PERCENT), \
   $(shell cat $*.ini))))), $(PATH_SUB_LIB)$(hdr$(COLON).h=.o))
 $(PATH_SUB_LIB)%.a: %.h $$(call call_prerequisite_dot_a)
 	@echo
-	@echo "*** compress archiv \"$@\""
+	@echo "** compress archiv \"$@\""
 	avr-ar rs $@ $(filter-out $<,$?)
 	rm -f $(foreach file,$(filter-out *.a, $(FILES_CLEAN)) \
 	  , $(PATH_SUB_LIB)$(file))

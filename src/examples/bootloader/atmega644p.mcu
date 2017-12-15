@@ -1,2 +1,1 @@
-MCU=atmega644p
 BOOTSTART=0xE000

@@ -1,2 +1,1 @@
-MCU=atmega64
 BOOTSTART=0xE000

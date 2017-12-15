@@ -3,8 +3,8 @@
 # src/demos/Makefile                                                          #
 # ==================                                                          #
 #                                                                             #
-# Version: 1.0.1                                                              #
-# Date   : 13.12.17                                                           #
+# Version: 1.0.2                                                              #
+# Date   : 14.12.17                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -25,11 +25,11 @@ SUFFIX = %.c %.ini $(notdir $*).mcu
 
 ###############################################################################
 # search for sources (of examples)
-DEMOS  = $(patsubst %/,%,$(wildcard */))
+DEMOS:= $(patsubst %/,%,$(wildcard */))
 SRC_FILES_DM = $(foreach source, $(DEMOS),$(source)/$(source).c)
 
 # create hex-files based on folder-name and mcu-type (single config-files)
-HEX_FILES_DM = $(foreach source, $(DEMOS), $(foreach mcu, \
+HEX_FILES_DM:= $(foreach source, $(DEMOS), $(foreach mcu, \
   $(basename $(notdir $(wildcard $(source)/*.mcu))), \
   $(PATH_OUT)$(source)/$(mcu)/out.hex))
 # create hex-files based on folder-name and mcu-type (list of mcu)
@@ -39,8 +39,8 @@ HEX_FILES_DM+= $(foreach source, $(DEMOS), \
 
 
 # search for sources and headers of library (for dependencies)
-SOURCES_LIB = $(wildcard $(PATH_SRC)*/*.c)
-HEADERS_LIB = $(wildcard $(PATH_INC)*.h)
+SOURCES_LIB:= $(wildcard $(PATH_SRC)*/*.c)
+HEADERS_LIB:= $(wildcard $(PATH_INC)*.h)
 
 ###############################################################################
 # define phony targets for make commands
@@ -75,10 +75,7 @@ $(PATH_OUT)%/out.hex: $$(call call_prerequisite_dot_hex) \
   $(SOURCES_LIB) $(HEADERS_LIB)
 	@echo
 	@echo "## compiling $(*D) for $(notdir $*)"
-	$(MAKE) -C $(@D) -f $(MAKEFILE) \
-	  $(shell if [ -e "$(PATH_OUT)$*/$(notdir $*).mcu" ]; then \
-	  cat $(PATH_OUT)$*/$(notdir $*).mcu; \
-	  else echo "MCU=$(notdir $*)"; fi)
+	$(MAKE) -C $(@D) -f $(MAKEFILE) MCU=$(notdir $*)
 
 
 call_prerequisite_other = $(wildcard $(dir $(*D))$(notdir $@))
