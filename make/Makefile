@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.5                                                              #
-# Date   : 14.12.17                                                           #
+# Version: 1.5.6                                                              #
+# Date   : 06.01.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -313,8 +313,8 @@ CFLAGS += -DBOOTSTART=$(BOOTSTART)
 LDFLAGS+= -Ttext $(BOOTSTART)
 endif
 
-ifneq ($(POLOLU_HEADER),)
-CFLAGS += -I "$(POLOLU_HEADER)"
+ifneq ($(HDR_POLOLU),)
+    CFLAGS += -I "$(HDR_POLOLU)"
 endif
 
 CFLAGS_INCLUDE_INI:= $(foreach hdr,$(HDR_INI),-include "$(hdr)")
@@ -333,7 +333,7 @@ COLON=:
 
 # define phony targets for make commands
 .PHONY: all   ini ini_init   build build_init   clean_simple clean \
-  download avrdude   data
+  program download avrdude   data
 
 
 all: ini build
@@ -374,6 +374,8 @@ clean:
 	-rm -f -R $(filter-out *.hex, $(FILES_CLEAN))
 	-rm -f -R $(HDR_INI)
 
+# only for backwards compatibility
+program: download
 
 download:
 	@echo
