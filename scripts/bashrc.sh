@@ -51,7 +51,7 @@ function robolib_all() {
     make all -f ${ROBOLIB_PATH}make/Makefile
 }
 
-function robolib_dowload() {
+function robolib_download() {
 
     make download -f ${ROBOLIB_PATH}make/Makefile
 }
