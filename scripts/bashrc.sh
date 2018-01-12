@@ -31,6 +31,12 @@ function robolib_repo_make() {
     make warn
 }
 
+function robolib_repo_additionals() {
+
+    cd ${ROBOLIB_PATH}
+    make download_additionals
+}
+
 
 #***************************[local project]***********************************
 # 2018 01 11
