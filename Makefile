@@ -47,7 +47,7 @@ clean:
 
 # install and download commands
 install_prerequisites:
-	$(MAKE) -C bin/ install_prerequisites
+	@cd scripts && ./install_prerequisites.sh
 
 download_additionals:
 	$(MAKE) -C bin/ download_additionals

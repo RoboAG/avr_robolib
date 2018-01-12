@@ -31,10 +31,16 @@ function robolib_repo_make() {
     make warn
 }
 
-function robolib_repo_additionals() {
+function robolib_repo_download_additionals() {
 
     cd ${ROBOLIB_PATH}
     make download_additionals
+}
+
+function robolib_repo_install_prerequisites() {
+
+    cd ${ROBOLIB_PATH}
+    make install_prerequisites
 }
 
 
@@ -100,5 +106,3 @@ function pololu_repo_make() {
         echo "path \"${POLOLU_PATH}\" not found"
     fi
 }
-
-

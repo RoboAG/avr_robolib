@@ -3,8 +3,8 @@
 # bin/Makefile                                                                #
 # ============                                                                #
 #                                                                             #
-# Version: 1.0.1                                                              #
-# Date   : 13.12.17                                                           #
+# Version: 1.0.2                                                              #
+# Date   : 11.01.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -34,7 +34,7 @@ PATH_CUR = $(shell pwd)/
 ###############################################################################
 # define phony targets for make commands
 .PHONY: all build clean \
-        download_additionals install_prerequisites \
+        download_additionals \
         update
 # "downloader" and "xbee" are not phony
 # (those targets should be created, only if they do not exist)
@@ -62,10 +62,6 @@ ifneq ($(firstword $(wildcard $(PATH_DL) $(PATH_XBEE))),)
 	-$(MAKE) -C $(PATH_XBEE) clean
 endif
 
-
-# install and download commands
-install_prerequisites:
-	./install_prerequisites.sh
 
 download_additionals: $(DEST_DL) $(DEST_XBEE)
 
