@@ -6,7 +6,7 @@ export ROBOLIB_PATH="$(cd "${ROBOLIB_PATH_SCRIPTS}../" && pwd )/"
 
 export ROBOLIB_MAKEFILE="${ROBOLIB_PATH}make/Makefile"
 
-export POLOLU_PATH="$(cd "${ROBOLIB_PATH}../pololu" && pwd )/"
+export POLOLU_PATH="${ROBOLIB_PATH}../pololu/"
 
 
 #***************************[repository]**************************************
