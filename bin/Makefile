@@ -3,7 +3,7 @@
 # bin/Makefile                                                                #
 # ============                                                                #
 #                                                                             #
-# Version: 1.0.2                                                              #
+# Version: 1.0.3                                                              #
 # Date   : 11.01.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -75,7 +75,7 @@ ifneq ($(firstword $(wildcard $(PATH_DL) $(PATH_XBEE))),)
 	-$(MAKE) -C $(PATH_XBEE) update
 else
 	@echo "# no additional binaries #"
-	@echo "  use: \$$ make additionals"
+	@echo "  use: \$$ make download_additionals"
 endif
 
 # real targets (not .PHONY)
