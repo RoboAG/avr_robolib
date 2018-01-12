@@ -106,3 +106,28 @@ function pololu_repo_make() {
         echo "path \"${POLOLU_PATH}\" not found"
     fi
 }
+
+
+#***************************[help]*******************************************
+# 2018 01 11
+
+function robolib_help() {
+
+    echo "robolib bash commands"
+    echo "====================="
+    echo ""
+    echo "repository:"
+    echo "    robolib_repo_update   pololu_repo_update"
+    echo "    robolib_repo_make     pololu_repo_make"
+    echo "    robolib_repo_status   pololu_repo_status"
+    echo ""
+    echo "local project:"
+    echo "    robolib_all"
+    echo "    robolib_clean"
+    echo ""
+    echo "    robolib_download"
+    echo "    robolib_avrdude"
+    echo ""
+    echo "    robolib_data"
+    echo ""
+}
