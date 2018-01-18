@@ -35,16 +35,18 @@ sudo apt-get install -y python python-serial
 #sudo pip install pyserial
 
 #***************************[documentation]***********************************
-# 2018 01 11
+# 2018 01 18
 
 sudo apt-get install -y doxygen
+    sudo apt-get install -y exuberant-ctags
 
 
 #***************************[additionals]*************************************
+# 2018 01 18
+
 if [ $# -gt 0 ]; then
     sudo apt-get install -y kate
     sudo apt-get install -y konsole
-    sudo apt-get install -y exuberant-ctags
 fi
 
 
