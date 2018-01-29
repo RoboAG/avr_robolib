@@ -1,3 +1,5 @@
+#!/bin/bash
+
 #***************************[paths and files]*********************************
 # 2018 01 11
 
@@ -45,31 +47,31 @@ function robolib_repo_install_prerequisites() {
 
 
 #***************************[local project]***********************************
-# 2018 01 11
+# 2018 01 28
 
 function robolib_clean() {
 
-    make clean -f ${ROBOLIB_PATH}make/Makefile
+    make clean    -f ${ROBOLIB_MAKEFILE}
 }
 
 function robolib_all() {
 
-    make all -f ${ROBOLIB_PATH}make/Makefile
+    make all      -f ${ROBOLIB_MAKEFILE}
 }
 
 function robolib_download() {
 
-    make download -f ${ROBOLIB_PATH}make/Makefile
+    make download -f ${ROBOLIB_MAKEFILE}
 }
 
 function robolib_avrdude() {
 
-    make avrdude -f ${ROBOLIB_PATH}make/Makefile
+    make avrdude  -f ${ROBOLIB_MAKEFILE}
 }
 
 function robolib_data() {
 
-    make data -f ${ROBOLIB_PATH}make/Makefile
+    make data     -f ${ROBOLIB_MAKEFILE}
 }
 
 

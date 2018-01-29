@@ -5,8 +5,8 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.2.0                                                              #
-# Date   : 31.03.17                                                           #
+# Version: 1.2.1                                                              #
+# Date   : 28.01.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -36,6 +36,12 @@ if [ -d "${NAME_GIT_THIS}" ]; then
 fi
 git clone "${URL_GIT_THIS}" "${NAME_GIT_THIS}"
 
+
+echo ""
+echo "### automatically sourcing this project"
+./${NAME_GIT_THIS}scripts/setup_bashrc.sh
+
+
 echo ""
 echo "### downloading additonal files"
 echo "Do you want to download additional binarys ?"
@@ -47,8 +53,14 @@ if [ "$answer" == "yes" ] || [ "$answer" == "Yes" ] || \
     make -f "${NAME_GIT_THIS}/Makefile" additionals
 fi
 
-if [ $? -eq 0 ]; then
+
+if [ $? -ne 0 ]; then
+    echo "### There have been errors! ###"
+    return -1;
+else
     echo ""
     echo "### deleting this script"
     rm "${NAME_CHECKOUT_SCRIPT}"
+
+    echo "all done :-)"
 fi
