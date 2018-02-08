@@ -1,7 +1,7 @@
-# robolib
-Library for using simple avr-controller - especially made for [keplerboard](https://github.com/peterweissig/eagle_keplerboard).
+# avr_robolib
+Library for using simple avr-controller - especially made for [keplerboard](https://github.com/RoboAG/eagle_keplerboard).
 
-[![Build Status](https://travis-ci.org/peterweissig/robolib.svg?branch=master)](https://travis-ci.org/peterweissig/robolib)
+[![Build Status](https://travis-ci.org/RoboAG/avr_robolib.svg?branch=master)](https://travis-ci.org/RoboAG/avr_robolib)
 
 ## Test library and build documentaion
 
@@ -18,7 +18,7 @@ Install the following packages:
 
 Download this Repository
 
-    git clone https://github.com/peterweissig/robolib.git
+    git clone https://github.com/RoboAG/avr_robolib.git
 
 
 Install packages ([see also here](scripts/install_prerequisites.sh)) :
