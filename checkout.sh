@@ -5,41 +5,43 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.2.1                                                              #
-# Date   : 28.01.18                                                           #
+# Version: 1.2.2                                                              #
+# Date   : 13.03.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
-#   https://github.com/peterweissig/robolib/                                  #
+#   https://github.com/RoboAG/avr_robolib/                                    #
 ###############################################################################
 
-NAME_GIT_THIS="robolib"
+PATH_THIS="robolib"
 
 ###############################################################################
-URL_GIT_BASE="https://github.com/peterweissig/"
+NAME_GIT_THIS="avr_${PATH_THIS}"
+
+URL_GIT_BASE="https://github.com/RoboAG/"
 URL_GIT_THIS="${URL_GIT_BASE}${NAME_GIT_THIS}.git"
 
 NAME_CHECKOUT_SCRIPT="checkout.sh"
 
 ###############################################################################
 echo "The project"
-echo "  \"${NAME_GIT_THIS}\""
+echo "  \"${PATH_THIS}\""
 echo "will be checked out completely."
 echo ""
 
 
 echo ""
 echo "### checking out the project"
-if [ -d "${NAME_GIT_THIS}" ]; then
+if [ -d "${PATH_THIS}" ]; then
     echo "This project already exists!"
     return
 fi
-git clone "${URL_GIT_THIS}" "${NAME_GIT_THIS}"
+git clone "${URL_GIT_THIS}" "${PATH_THIS}"
 
 
 echo ""
 echo "### automatically sourcing this project"
-./${NAME_GIT_THIS}scripts/setup_bashrc.sh
+./${PATH_THIS}scripts/setup_bashrc.sh
 
 
 echo ""
@@ -50,7 +52,7 @@ read answer;
 if [ "$answer" == "yes" ] || [ "$answer" == "Yes" ] || \
    [ "$answer" == "y" ] || [ "$answer" == "Y" ] || \
    [ "$answer" == "YES" ]; then
-    make -f "${NAME_GIT_THIS}/Makefile" additionals
+    make -f "${PATH_THIS}/Makefile" additionals
 fi
 
 
