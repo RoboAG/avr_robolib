@@ -49,6 +49,11 @@ function robolib_repo_install_prerequisites() {
 #***************************[local project]***********************************
 # 2018 01 28
 
+function robolib_clean_keep_output() {
+
+    make clean_keep_output -f ${ROBOLIB_PATH}make/Makefile
+}
+
 function robolib_clean() {
 
     make clean    -f ${ROBOLIB_MAKEFILE}

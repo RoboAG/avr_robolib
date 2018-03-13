@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.6                                                              #
-# Date   : 06.01.18                                                           #
+# Version: 1.5.7                                                              #
+# Date   : 26.01.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -332,7 +332,7 @@ QUOTE="
 COLON=:
 
 # define phony targets for make commands
-.PHONY: all   ini ini_init   build build_init   clean_simple clean \
+.PHONY: all   ini ini_init   build build_init   clean_keep_output clean \
   program download avrdude   data
 
 
@@ -360,18 +360,20 @@ ini_init:
 	mkdir -p $(PATH_SUB_LIB)
 
 
-clean_simple:
+clean_keep_output:
 	@echo
 	@echo "*** cleaning project \"make $@\""
+	-rm -f -R $(PATH_SUB_LIB)
 	-rm -f -R $(PATH_SUB_TMP)
-	-rm -f -R $(FILES_CLEAN)
+	-rm -f -R $(filter-out *.hex, $(FILES_CLEAN))
+	-rm -f -R $(HDR_INI)
 
 clean:
 	@echo
 	@echo "*** cleaning project \"make $@\""
 	-rm -f -R $(PATH_SUB_LIB)
 	-rm -f -R $(PATH_SUB_TMP)
-	-rm -f -R $(filter-out *.hex, $(FILES_CLEAN))
+	-rm -f -R $(FILES_CLEAN)
 	-rm -f -R $(HDR_INI)
 
 # only for backwards compatibility
