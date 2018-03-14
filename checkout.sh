@@ -5,7 +5,7 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.2.3                                                              #
+# Version: 1.2.4                                                              #
 # Date   : 13.03.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -17,7 +17,6 @@ NAME_THIS="robolib"
 
 ###############################################################################
 PATH_THIS="${NAME_THIS}/"
-
 NAME_GIT_THIS="avr_${NAME_THIS}"
 
 URL_GIT_BASE="https://github.com/RoboAG/"
@@ -48,12 +47,10 @@ echo "### automatically sourcing this project"
 
 echo ""
 echo "### downloading additonal files"
-echo "Do you want to download additional binarys ?"
+echo "Do you want to download additional binarys ? (y/N)"
 echo "(This can also be done later be invocing \"make additionals\")"
-read answer;
-if [ "$answer" == "yes" ] || [ "$answer" == "Yes" ] || \
-   [ "$answer" == "y" ] || [ "$answer" == "Y" ] || \
-   [ "$answer" == "YES" ]; then
+read -s -n 1 ANS; echo ""
+if [ "$ANS" == "y" ]; then
     make -f "${PATH_THIS}/Makefile" additionals
 fi
 
