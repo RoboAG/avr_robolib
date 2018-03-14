@@ -5,7 +5,7 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.2.2                                                              #
+# Version: 1.2.3                                                              #
 # Date   : 13.03.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -13,10 +13,12 @@
 #   https://github.com/RoboAG/avr_robolib/                                    #
 ###############################################################################
 
-PATH_THIS="robolib"
+NAME_THIS="robolib"
 
 ###############################################################################
-NAME_GIT_THIS="avr_${PATH_THIS}"
+PATH_THIS="${NAME_THIS}/"
+
+NAME_GIT_THIS="avr_${NAME_THIS}"
 
 URL_GIT_BASE="https://github.com/RoboAG/"
 URL_GIT_THIS="${URL_GIT_BASE}${NAME_GIT_THIS}.git"
@@ -25,7 +27,7 @@ NAME_CHECKOUT_SCRIPT="checkout.sh"
 
 ###############################################################################
 echo "The project"
-echo "  \"${PATH_THIS}\""
+echo "  \"${NAME_THIS}\""
 echo "will be checked out completely."
 echo ""
 
