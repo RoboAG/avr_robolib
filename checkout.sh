@@ -5,7 +5,7 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.2.4                                                              #
+# Version: 1.2.5                                                              #
 # Date   : 13.03.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -48,10 +48,10 @@ echo "### automatically sourcing this project"
 echo ""
 echo "### downloading additonal files"
 echo "Do you want to download additional binarys ? (y/N)"
-echo "(This can also be done later be invocing \"make additionals\")"
+echo "(This can also be done later be invocing \"make download_additionals\")"
 read -s -n 1 ANS; echo ""
 if [ "$ANS" == "y" ]; then
-    make -f "${PATH_THIS}/Makefile" additionals
+    make -f "${PATH_THIS}/Makefile" download_additionals
 fi
 
 
