@@ -1,5 +1,5 @@
 /******************************************************************************
-* tick/tick_atmega2561.c                                                      *
+* tick/tick_atmega328p.c                                                      *
 * ======================                                                      *
 *                                                                             *
 * Author : Peter Weissig                                                      *
@@ -10,9 +10,9 @@
 
 //**************************<File version>*************************************
 #define ROBOLIB_TICK_SUB_VERSION \
-  "robolib/tick/tick_atmega2561.c 20.03.2018 V1.0.1"
+  "robolib/tick/tick_atmega328p.c 20.03.2018 V1.0.0"
 
-//**************************[tick_init]**************************************** 27.09.2015
+//**************************[tick_init]**************************************** 20.03.2018
 void robolib_tick_init() {
 
     #if TICK_SYSTICK == TIMER0 // switch TIMER
@@ -24,7 +24,15 @@ void robolib_tick_init() {
             #define ROBOLIB_TICK_CS  0b101
             #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 / 1024))
 
+        #elif F_CPU / 100 /  128 > 256
+            #define ROBOLIB_TICK_CS  0b100
+            #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /  256))
+
         #elif F_CPU / 100 /   64 > 256
+            #define ROBOLIB_TICK_CS  0b100
+            #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /  256))
+
+        #elif F_CPU / 100 /   32 > 256
             #define ROBOLIB_TICK_CS  0b100
             #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /  256))
 
@@ -42,33 +50,36 @@ void robolib_tick_init() {
         #endif
 
         // 8-bit Timer
-        // Mode 2 (CTC til OCRA)
+        // Mode 2 (CTC until OCRA)
         TCCR0A =  _BV(WGM01);
-            // Bit 4-7 (COM0xx) = 0000 output mode for A and B
-            // Bit 0-1 (WGM0x ) =  010 select timer mode [WGM02 in TCCR0B]
+            // Bit 6-7 (COM0Ax) =   00 output mode (none)
+            // Bit 4-5 (COM0Bx) =   00 output mode (none)
+            // Bit 2-3 (  -   ) =      reserved
+            // Bit 0-1 (WGM0x ) =   10 select timer mode [WGM02 in TCCR0B]
 
-        TCCR0B =  (ROBOLIB_TICK_CS & 0x07);
-            // Bit 6-7 (FOC0x ) =   00 force output compare
-            // Bit 3   (WGM02 ) =    0 [see WGM0x in TCCR0A]
-            // Bit 0-2 (CS02  ) =  ??? [calculated]
+        TCCR0B = (ROBOLIB_TICK_CS & 0x07);
+            // Bit 6-7 (FOC0n)  =    0 force output compare (none)
+            // Bit 4-5 (  -   ) =      reserved
+            // Bit 3   (WGM02 ) =    0 select timer mode [WGM0x in TCCR0A]
+            // Bit 0-2 (CS0x  ) =  ??? [calculated]
 
         TCNT0 = 0;
             // Timer/Counter Register - current value of timer
 
-        OCR0A = ROBOLIB_TICK_MAX;
-            // Output Compare Register A - top for timer
-
-        OCR0B = 0;
-            // Output Compare Register B - unused
+        OCR0A  = ROBOLIB_TICK_MAX;
+            // Output Compare Register - top for timer
 
         TIMSK0 = _BV(OCIE0A);
+            // Bit 3-7 (  -   ) =      reserved
             // Bit 2   (OCIE0B) =    0 interrupt for compare match B
             // Bit 1   (OCIE0A) =    1 interrupt for compare match A (tick)
             // Bit 0   (TOIE0 ) =    0 interrupt for overflow
 
-        TIFR0 = _BV(OCF0A) | _BV(OCF0B) | _BV(TOV0);
-            // Bit 1-2 (OCF0x ) =   11 interrupt flag for compare match x
-            // Bit 0   (TOV0  ) =    1 interrupt flag for overflow
+        TIFR0 = _BV(OCF0A);
+            // Bit 3-7 (  -   ) =      reserved
+            // Bit 2   (OCF0B ) =    0 interrupt for compare match B
+            // Bit 1   (OCF0A ) =    1 interrupt for compare match A (tick)
+            // Bit 0   (TOV0  ) =    0 interrupt for overflow
 
         #define ROBOLIB_TICK_ISR ISR(TIMER0_COMPA_vect)
         #define ROBOLIB_TICK_ISR_SEI() ( \

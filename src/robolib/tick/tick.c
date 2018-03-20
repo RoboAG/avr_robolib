@@ -5,12 +5,12 @@
 * Author : Peter Weissig                                                      *
 *                                                                             *
 * For help or bug report please visit:                                        *
-*   https://github.com/peterweissig/robolib                                   *
+*   https://github.com/RoboAG/avr_robolib                                     *
 ******************************************************************************/
 
 //**************************<File version>*************************************
 #define ROBOLIB_TICK_VERSION \
-  "robolib/tick/tick.c 27.09.2015 V1.0.0"
+  "robolib/tick/tick.c 20.03.2018 V1.0.1"
 
 //**************************<Included files>***********************************
 #include <robolib/tick.h>
@@ -34,6 +34,9 @@ volatile uint16_t robolib_tick_time;
 #elif  defined (__AVR_ATmega64__)   // switch micro controller
     #include <tick/tick_atmega64.c>
     #define MCU atmega64
+#elif  defined (__AVR_ATmega328P__) // switch micro controller
+    #include <tick/tick_atmega328p.c>
+    #define MCU atmega328p
 #else                               // switch micro controller
     #error "device is not supported (yet)"
 #endif                              // switch micro controller

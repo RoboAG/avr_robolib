@@ -5,14 +5,14 @@
 * Author : Peter Weissig                                                      *
 *                                                                             *
 * For help or bug report please visit:                                        *
-*   https://github.com/peterweissig/robolib                                   *
+*   https://github.com/RoboAG/avr_robolib                                     *
 ******************************************************************************/
 
 //**************************<File version>*************************************
 #define ROBOLIB_TICK_SUB_VERSION \
-  "robolib/tick/tick_atmega64.c 27.09.2015 V1.0.0"
+  "robolib/tick/tick_atmega64.c 20.03.2018 V1.1.0"
 
-//**************************[tick_init]**************************************** 27.09.2015
+//**************************[tick_init]**************************************** 20.03.2018
 void robolib_tick_init() {
 
     #if TICK_SYSTICK == TIMER0 // switch TIMER
@@ -30,15 +30,15 @@ void robolib_tick_init() {
 
         #elif F_CPU / 100 /   64 > 256
             #define ROBOLIB_TICK_CS  0b101
-            #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /  256))
+            #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /  128))
 
         #elif F_CPU / 100 /   32 > 256
             #define ROBOLIB_TICK_CS  0b100
-            #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /  256))
+            #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /   64))
 
         #elif F_CPU / 100 /    8 > 256
             #define ROBOLIB_TICK_CS  0b011
-            #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /   64))
+            #define ROBOLIB_TICK_MAX ((uint8_t) (F_CPU / 100 /   32))
 
         #elif F_CPU / 100 /    1 > 256
             #define ROBOLIB_TICK_CS  0b010
@@ -97,7 +97,7 @@ void robolib_tick_init() {
     #endif                                // switch TICK_SYSTICK
 }
 
-//**************************[ISR(tick)]**************************************** 27.09.2015
+//**************************[ISR(tick)]**************************************** 20.03.2018
 ROBOLIB_TICK_ISR {
 
     robolib_tick_time++;
@@ -107,6 +107,8 @@ ROBOLIB_TICK_ISR {
     #ifdef ROBOLIB_TICK_FUNCTION
         ROBOLIB_TICK_FUNCTION();
     #endif;
+
+    tick_userfunction();
 
     ROBOLIB_TICK_ISR_CLI();
 }

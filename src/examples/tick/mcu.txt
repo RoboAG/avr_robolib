@@ -1,2 +1,3 @@
+atmega328p
 atmega64
 atmega2561

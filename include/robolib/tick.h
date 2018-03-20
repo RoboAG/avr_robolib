@@ -2,8 +2,8 @@
 * robolib/tick.h                                                              *
 * ==============                                                              *
 *                                                                             *
-* Version: 1.0.0                                                              *
-* Date   : 27.09.15                                                           *
+* Version: 1.0.1                                                              *
+* Date   : 20.03.18                                                           *
 * Author : Peter Weissig                                                      *
 *                                                                             *
 * Changelog:                                                                  *
@@ -11,7 +11,7 @@
 *     - first release                                                         *
 *                                                                             *
 * For help or bug report please visit:                                        *
-*   https://github.com/peterweissig/robolib                                   *
+*   https://github.com/RoboAG/avr_robolib                                     *
 ******************************************************************************/
 
 #ifndef _ROBOLIB_TICK_H_
@@ -162,6 +162,17 @@ uint8_t tick_tohsec(uint16_t time);
  * @sa tick_get(), tick_tomin(), tick_tosec(), tick_tohsec()
  */
 uint16_t tick_tomsec(uint16_t time);
+
+
+/**
+ * @brief Systick function.
+ *
+ * If the systick is used, this function will be called every 10ms.
+ *
+ * @note This function must be implemented by the user.
+ */
+__attribute__((weak))
+void tick_userfunction(void);
 
 /**
  * @brief Prints general information about the tick.
