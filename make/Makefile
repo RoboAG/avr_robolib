@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.7                                                              #
-# Date   : 26.01.18                                                           #
+# Version: 1.5.8                                                              #
+# Date   : 15.04.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -280,7 +280,7 @@ endif
 
 # pololu
 ifneq ($(strip $(POLOLU)),)
-    LIB_POLOLU:= $(PATH_MAKE)../../pololu/libpololu_$(MCU).a
+    LIB_POLOLU:= $(PATH_MAKE)../../pololu/libpololu_$(strip $(MCU)).a
 
     HDR_POLOLU:= $(PATH_MAKE)../../pololu/src/
     #HDR_POLOLU = $(PATH_MAKE)../../pololu/pololu/

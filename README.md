@@ -18,7 +18,7 @@ Install the following packages:
 
 Download this Repository
 
-    git clone https://github.com/RoboAG/avr_robolib.git
+    git clone https://github.com/RoboAG/avr_robolib.git robolib
 
 
 Install packages ([see also here](scripts/install_prerequisites.sh)) :
