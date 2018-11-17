@@ -47,20 +47,32 @@ echo "### automatically sourcing this project"
 
 echo ""
 echo "### installing needed packages"
-echo "Do you want to install needed packages ? (y/N)"
-echo "(This can also be done later by invocing \"make install_prerequisites\")"
-read -s -n 1 ANS; echo ""
-if [ "$ANS" == "y" ]; then
+echo "Do you want to install needed packages ? (No/yes)"
+echo -n "(This can also be done later by invocing "
+echo    "\"make install_prerequisites\")"
+read answer
+if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
+  [ "$answer" != "yes" ]; then
+
+    echo "skipped"
+else
+
     bash -c "cd ${PATH_THIS} && make install_prerequisites"
 fi
 
 
 echo ""
 echo "### downloading additional files"
-echo "Do you want to download additional binaries ? (y/N)"
-echo "(This can also be done later by invocing \"make download_additionals\")"
-read -s -n 1 ANS; echo ""
-if [ "$ANS" == "y" ]; then
+echo "Do you want to download additional binaries ? (No/yes)"
+echo -n "(This can also be done later by invocing "
+echo    "\"make download_additionals\")"
+read answer
+if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
+  [ "$answer" != "yes" ]; then
+
+    echo "skipped"
+else
+
     bash -c "cd ${PATH_THIS} && make download_additionals"
 fi
 
