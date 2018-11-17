@@ -5,8 +5,8 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.2.6                                                              #
-# Date   : 13.03.18                                                           #
+# Version: 1.2.7                                                              #
+# Date   : 17.11.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -79,7 +79,8 @@ fi
 
 if [ $? -ne 0 ]; then
     echo "### There have been errors! ###"
-    return -1;
+    return -1
+    exit -1
 else
     echo ""
     echo "### deleting this script"

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #***************************[system]******************************************
-# 2018 01 11
+# 2018 11 17
 
 sudo apt-get update
-if [ $? -ne 0 ]; then return -1; fi
+if [ $? -ne 0 ]; then return -1; exit -1; fi
 
 
 #***************************[compiler]****************************************
@@ -53,5 +53,12 @@ fi
 
 
 #***************************[done]********************************************
+# 2018 11 17
 
-echo "all done :-)"
+if [ $? -ne 0 ]; then
+    echo "There have been errors :-("
+    return -1
+    exit -1
+else
+    echo "all done :-)"
+fi
