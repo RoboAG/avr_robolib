@@ -5,7 +5,7 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.2.7                                                              #
+# Version: 1.2.8                                                              #
 # Date   : 17.11.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -50,7 +50,12 @@ echo "### installing needed packages"
 echo "Do you want to install needed packages ? (No/yes)"
 echo -n "(This can also be done later by invocing "
 echo    "\"make install_prerequisites\")"
-read answer
+if [ "$1" != "-y" ] && [ "$1" != "--yes" ]; then
+    read answer
+else
+    echo "<auto answer \"yes\">"
+    answer="yes"
+fi
 if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
   [ "$answer" != "yes" ]; then
 
@@ -66,7 +71,12 @@ echo "### downloading additional files"
 echo "Do you want to download additional binaries ? (No/yes)"
 echo -n "(This can also be done later by invocing "
 echo    "\"make download_additionals\")"
-read answer
+if [ "$1" != "-y" ] && [ "$1" != "--yes" ]; then
+    read answer
+else
+    echo "<auto answer \"yes\">"
+    answer="yes"
+fi
 if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
   [ "$answer" != "yes" ]; then
 

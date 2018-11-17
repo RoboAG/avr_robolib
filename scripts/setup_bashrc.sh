@@ -5,7 +5,12 @@ echo "setup_bashrc.sh script was called."
 echo "The following library will be sourced within your bashrc."
 echo "    robolib"
 echo -n "Do you wish to continue (No/yes)?"
-read answer
+if [ "$1" != "-y" ] && [ "$1" != "--yes" ]; then
+    read answer
+else
+    echo "<auto answer \"yes\">"
+    answer="yes"
+fi
 if [ "$answer" != "y" ] && [ "$answer" != "Y" ] && \
   [ "$answer" != "yes" ]; then
 
