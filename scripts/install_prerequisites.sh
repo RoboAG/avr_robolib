@@ -40,7 +40,7 @@ sudo apt-get install -y python python-serial
 # 2018 01 18
 
 sudo apt-get install -y doxygen
-    sudo apt-get install -y exuberant-ctags
+sudo apt-get install -y exuberant-ctags
 
 
 #***************************[additionals]*************************************
