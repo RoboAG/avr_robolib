@@ -5,7 +5,7 @@
 # checkout.sh                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.2.8                                                              #
+# Version: 1.2.9                                                              #
 # Date   : 17.11.18                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -36,13 +36,14 @@ echo "### checking out the project"
 if [ -d "${PATH_THIS}" ]; then
     echo "This project already exists!"
     return
+    exit
 fi
 git clone "${URL_GIT_THIS}" "${PATH_THIS}"
 
 
 echo ""
 echo "### automatically sourcing this project"
-./${PATH_THIS}scripts/setup_bashrc.sh
+./${PATH_THIS}scripts/setup_bashrc.sh $1
 
 
 echo ""
