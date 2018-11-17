@@ -13,7 +13,7 @@ Library for using simple avr-controller - especially made for [keplerboard](http
 
 Install the following packages:
 
-    sudo apt-get install git
+    sudo apt-get install git make
 
 
 Download this Repository
