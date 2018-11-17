@@ -1,9 +1,9 @@
 #!/bin/bash
 
 #***************************[paths and files]*********************************
-# 2018 01 11
+# 2018 11 17
 
-export ROBOLIB_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd )/"
+export ROBOLIB_PATH_SCRIPTS="$(cd "$(dirname "${BASH_SOURCE}")" && pwd )/"
 export ROBOLIB_PATH="$(cd "${ROBOLIB_PATH_SCRIPTS}../" && pwd )/"
 
 export ROBOLIB_MAKEFILE="${ROBOLIB_PATH}make/Makefile"
