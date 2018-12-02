@@ -29,7 +29,7 @@ else
         echo "Adding robolib to your bashrc."
 
         echo ""                                        >> ~/.bashrc
-        echo "# $(date +"%Y_%m_%d") sourcing robolib:" >> ~/.bashrc
+        echo "# $(date +"%Y %m %d") sourcing robolib:" >> ~/.bashrc
         echo "$BASHRC_SOURCE"                          >> ~/.bashrc
     fi
 fi

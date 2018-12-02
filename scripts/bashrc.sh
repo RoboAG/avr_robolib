@@ -1,5 +1,16 @@
 #!/bin/bash
 
+#***************************[check if already sourced]************************
+# 2018 11 30
+
+if [ "$SOURCED_ROBO_ROBOLIB" != "" ]; then
+
+    return
+    exit
+fi
+
+export SOURCED_ROBO_ROBOLIB=1
+
 #***************************[paths and files]*********************************
 # 2018 11 17
 
