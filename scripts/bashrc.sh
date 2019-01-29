@@ -23,7 +23,7 @@ export POLOLU_PATH="${ROBOLIB_PATH}../pololu/"
 
 
 #***************************[repository]**************************************
-# 2018 01 11
+# 2019 01 29
 
 function robolib_repo_update() {
 
@@ -52,8 +52,8 @@ function robolib_repo_download_additionals() {
 
 function robolib_repo_install_prerequisites() {
 
-    cd ${ROBOLIB_PATH}
-    make install_prerequisites
+    cd ${ROBOLIB_PATH_SCRIPTS}
+    ./install_prerequisites.sh
 }
 
 
