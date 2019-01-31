@@ -3,12 +3,12 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.8                                                              #
-# Date   : 15.04.18                                                           #
+# Version: 1.5.9                                                              #
+# Date   : 30.01.19                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
-#   https://github.com/peterweissig/robolib                                   #
+#   https://github.com/RoboAG/avr_robolib                                     #
 ###############################################################################
 
 # Target for compiling and linking (without extension)
@@ -320,8 +320,8 @@ endif
 CFLAGS_INCLUDE_INI:= $(foreach hdr,$(HDR_INI),-include "$(hdr)")
 
 ###############################################################################
-# ignore implicit chain and therefore deletion of hex-file
-.SECONDARY: $(OUTPUT).hex
+# ignore implicit chain and therefore deletion of hex-file and elf-file
+.SECONDARY: $(OUTPUT).hex $(PATH_SUB_TMP)$(OUTPUT).elf
 
 # allow second expansion for complex rules
 .SECONDEXPANSION:
@@ -430,7 +430,7 @@ endif
 	@echo "*** linking project"
 	avr-gcc $(CFLAGS) $(OBJ) $(LIB_ALL) --output $@ $(LDFLAGS)
 	@echo
-	@avr-size -A $(PATH_SUB_TMP)$(OUTPUT).elf
+	@avr-size --mcu $(MCU) -C $@
 
 $(PATH_SUB_TMP)%.o: %.c
 	@echo
