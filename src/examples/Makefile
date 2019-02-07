@@ -8,7 +8,7 @@
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
-#   https://github.com/RoboAG/robolib                                         #
+#   https://github.com/RoboAG/avr_robolib                                     #
 ###############################################################################
 
 # global paths
