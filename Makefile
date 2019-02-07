@@ -3,12 +3,12 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.2.4                                                              #
-# Date   : 13.12.17                                                           #
+# Version: 1.2.5                                                              #
+# Date   : 07.02.19                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
-#   https://github.com/peterweissig/robolib                                   #
+#   https://github.com/RoboAG/robolib                                         #
 ###############################################################################
 
 NAME_GIT_THIS=robolib

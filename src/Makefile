@@ -3,12 +3,12 @@
 # src/Makefile                                                                #
 # ============                                                                #
 #                                                                             #
-# Version: 1.0.1                                                              #
-# Date   : 27.11.17                                                           #
+# Version: 1.0.2                                                              #
+# Date   : 07.02.19                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
-#   https://github.com/peterweissig/robolib                                   #
+#   https://github.com/RoboAG/robolib                                         #
 ###############################################################################
 
 #SUBDIRS = robolib examples demos

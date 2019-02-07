@@ -3,12 +3,12 @@
 # doc/Makefile                                                                #
 # ============                                                                #
 #                                                                             #
-# Version: 1.0.0                                                              #
-# Date   : 06.11.17                                                           #
+# Version: 1.0.1                                                              #
+# Date   : 07.02.19                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
-#   https://github.com/peterweissig/robolib                                   #
+#   https://github.com/RoboAG/robolib                                         #
 ###############################################################################
 
 # define phony targets for make commands
