@@ -5,7 +5,7 @@
 * Author : David Ehnert                                                       *
 *                                                                             *
 * For help or bug report please visit:                                        *
-*   https://github.com/peterweissig/robolib                                   *
+*   https://github.com/RoboAG/avr_robolib                                     *
 ******************************************************************************/
 
 //**************************<File version>*************************************

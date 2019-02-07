@@ -11,7 +11,7 @@
 *     - first release                                                         *
 *                                                                             *
 * For help or bug report please visit:                                        *
-*   https://github.com/peterweissig/robolib                                   *
+*   https://github.com/RoboAG/avr_robolib                                     *
 ******************************************************************************/
 
 #ifndef _ROBOLIB_EEPROM_H_

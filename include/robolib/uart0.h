@@ -7,7 +7,7 @@
 * Author : Peter Weissig                                                      *
 *                                                                             *
 * For help or bug report please visit:                                        *
-*   https://github.com/peterweissig/robolib                                   *
+*   https://github.com/RoboAG/avr_robolib                                     *
 ******************************************************************************/
 
 #ifndef _ROBOLIB_UART0_H_
