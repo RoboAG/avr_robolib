@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.5.9                                                              #
-# Date   : 30.01.19                                                           #
+# Version: 1.6.0                                                              #
+# Date   : 26.07.21                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -332,8 +332,8 @@ QUOTE="
 COLON=:
 
 # define phony targets for make commands
-.PHONY: all   ini ini_init   build build_init   clean_keep_output clean \
-  program download avrdude   data
+.PHONY: all   ini ini_init   init_kepler init_3pi   build build_init \
+  clean_keep_output clean   program download avrdude   data
 
 
 all: ini build
@@ -362,19 +362,49 @@ ini_init:
 
 clean_keep_output:
 	@echo
-	@echo "*** cleaning project \"make $@\""
+	@echo "*** cleaning project \"make clean...\""
 	-rm -f -R $(PATH_SUB_LIB)
 	-rm -f -R $(PATH_SUB_TMP)
 	-rm -f -R $(filter-out *.hex, $(FILES_CLEAN))
 	-rm -f -R $(HDR_INI)
 
-clean:
+clean: clean_keep_output
+	-rm -f -R $(*.hex)
+
+
+init_kepler:
 	@echo
-	@echo "*** cleaning project \"make $@\""
-	-rm -f -R $(PATH_SUB_LIB)
-	-rm -f -R $(PATH_SUB_TMP)
-	-rm -f -R $(FILES_CLEAN)
-	-rm -f -R $(HDR_INI)
+	@echo "*** initialize for keplerboard \"make $@\""
+ifeq ($(wildcard *.mcu),)
+	@echo "# Comports"                           >  atmega2561.mcu
+	@echo "#COMPORT_DATA=/dev/ttyUSB0"           >> atmega2561.mcu
+	@echo "#COMPORT_PROG=/dev/ttyS0"             >> atmega2561.mcu
+	@echo ""                                     >> atmega2561.mcu
+	@echo "# Reset sequence for old Keplerboard" >> atmega2561.mcu
+	@echo "#RESET_SEQUENCE=-R RTS+ -R DTR+ -R 100 -R RTS- -R 200" \
+	  >> atmega2561.mcu
+else
+	@echo "error mcu-file already exist"
+	@echo "  ($(wildcard *.mcu))"
+	@false
+endif
+
+init_3pi:
+	@echo
+	@echo "*** initialize for 3pi \"make $@\""
+ifeq ($(wildcard *.mcu),)
+	@echo "# Using pololu library"               >  atmega328p.mcu
+	@echo "POLOLU=1"                             >> atmega328p.mcu
+	@echo ""                                     >> atmega328p.mcu
+	@echo "# Comports"                           >> atmega328p.mcu
+	@echo "#COMPORT_AVRDUDE=/dev/ttyACM0"        >> atmega328p.mcu
+	@echo "#COMPORT_DATA=/dev/ttyUSB0"           >> atmega328p.mcu
+else
+	@echo "error mcu-file already exist"
+	@echo "  ($(wildcard *.mcu))"
+	@false
+endif
+
 
 # only for backwards compatibility
 program: download

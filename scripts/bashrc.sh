@@ -65,11 +65,28 @@ function robolib_repo_install_prerequisites() {
 
 
 #***************************[local project]***********************************
-# 2018 01 28
+# 2021 07 26
+
+function robolib_init_kepler() {
+
+    make init_kepler -f ${ROBOLIB_MAKEFILE}
+}
+
+function robolib_init_3pi() {
+
+    make init_3pi -f ${ROBOLIB_MAKEFILE}
+}
+
+
+function robolib_all() {
+
+    make all      -f ${ROBOLIB_MAKEFILE}
+}
+
 
 function robolib_clean_keep_output() {
 
-    make clean_keep_output -f ${ROBOLIB_PATH}make/Makefile
+    make clean_keep_output -f ${ROBOLIB_MAKEFILE}
 }
 
 function robolib_clean() {
@@ -77,9 +94,10 @@ function robolib_clean() {
     make clean    -f ${ROBOLIB_MAKEFILE}
 }
 
-function robolib_all() {
 
-    make all      -f ${ROBOLIB_MAKEFILE}
+function robolib_avrdude() {
+
+    make avrdude  -f ${ROBOLIB_MAKEFILE}
 }
 
 function robolib_download() {
@@ -87,10 +105,6 @@ function robolib_download() {
     make download -f ${ROBOLIB_MAKEFILE}
 }
 
-function robolib_avrdude() {
-
-    make avrdude  -f ${ROBOLIB_MAKEFILE}
-}
 
 function robolib_data() {
 
@@ -134,7 +148,7 @@ function pololu_repo_make() {
 
 
 #***************************[help]*******************************************
-# 2018 01 11
+# 2021 07 26
 
 function robolib_help() {
 
@@ -147,6 +161,9 @@ function robolib_help() {
     echo "    robolib_repo_status   pololu_repo_status"
     echo ""
     echo "local project:"
+    echo "    robolib_init_kepler"
+    echo "    robolib_init_3pi"
+    echo ""
     echo "    robolib_all"
     echo "    robolib_clean"
     echo ""
