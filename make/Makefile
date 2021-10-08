@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.6.0                                                              #
-# Date   : 26.07.21                                                           #
+# Version: 1.6.1                                                              #
+# Date   : 08.10.2021                                                         #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -369,7 +369,7 @@ clean_keep_output:
 	-rm -f -R $(HDR_INI)
 
 clean: clean_keep_output
-	-rm -f -R $(*.hex)
+	-rm -f -R *.hex
 
 
 init_kepler:
