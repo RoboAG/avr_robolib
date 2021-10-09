@@ -3,7 +3,7 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.6.1                                                              #
+# Version: 1.6.2                                                              #
 # Date   : 08.10.2021                                                         #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -402,6 +402,38 @@ ifeq ($(wildcard *.mcu),)
 else
 	@echo "error mcu-file already exist"
 	@echo "  ($(wildcard *.mcu))"
+	@false
+endif
+ifeq ($(wildcard *.c),)
+	@echo "// include from pololu"               >   main.c
+	@echo "#include <Pololu3pi/Pololu3pi.h>"     >>  main.c
+	@echo ""                                     >>  main.c
+	@echo "int main(void) {"                     >>  main.c
+	@echo ""                                     >>  main.c
+	@echo "    // initialize system"             >>  main.c
+	@echo "    set_motors(0,0);"                 >>  main.c
+	@echo ""                                     >>  main.c
+	@echo "    // draw a smiley on the Display"  >>  main.c
+	@echo "    clear();"                         >>  main.c
+	@echo "    print(\"  :-)\");"                >>  main.c
+	@echo ""                                     >>  main.c
+	@echo "    // turn on red led"               >>  main.c
+	@echo "    red_led(HIGH);"                   >>  main.c
+	@echo ""                                     >>  main.c
+	@echo "    // endless loop"                  >>  main.c
+	@echo "    while (1) {"                      >>  main.c
+	@echo "        // toogle green led"          >>  main.c
+	@echo "        green_led(TOGGLE);"           >>  main.c
+	@echo "        delay_ms(250);"               >>  main.c
+	@echo "    }"                                >>  main.c
+	@echo ""                                     >>  main.c
+	@echo "    return 0;"                        >>  main.c
+	@echo "}"                                    >>  main.c
+	@echo ""                                     >>  main.c
+
+else
+	@echo "error c-file already exist"
+	@echo "  ($(wildcard *.c))"
 	@false
 endif
 
