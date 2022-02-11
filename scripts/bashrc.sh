@@ -79,7 +79,15 @@ function robolib_init_3pi() {
 
 function robolib_all() {
 
-    make all      -f "${ROBOLIB_MAKEFILE}"
+    echo ""
+    echo "robolib_all is deprecated - please use **robolib_build** instead"
+    echo ""
+    robolib_build
+}
+
+function robolib_build() {
+
+    make build    -f "${ROBOLIB_MAKEFILE}"
 }
 
 
@@ -147,7 +155,7 @@ function pololu_repo_make() {
 
 
 #***************************[help]*******************************************
-# 2021 07 26
+# 2022 02 11
 
 function robolib_help() {
 
@@ -163,7 +171,7 @@ function robolib_help() {
     echo "    robolib_init_kepler"
     echo "    robolib_init_3pi"
     echo ""
-    echo "    robolib_all"
+    echo "    robolib_build"
     echo "    robolib_clean"
     echo ""
     echo "    robolib_download"
