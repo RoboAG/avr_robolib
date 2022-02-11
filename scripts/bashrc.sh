@@ -134,7 +134,20 @@ function robolib_download() {
 
 function robolib_data() {
 
-    make data     -f "${ROBOLIB_MAKEFILE}"
+    # check if optional first parameter exists and is not empty
+    ARG_COMPORT=""
+    if [ "$1" != "" ]; then
+        ARG_COMPORT="COMPORT_DATA=$1"
+    fi
+
+    # check if optional second parameter exists and is not empty
+    ARG_BAUDRATE=""
+    if [ "$2" != "" ]; then
+        ARG_BAUDRATE="BAUDRATE_DATA=$2"
+    fi
+
+    # run Makefile
+    make data     -f "${ROBOLIB_MAKEFILE}" $ARG_COMPORT $ARG_BAUDRATE
 }
 
 
@@ -196,6 +209,6 @@ function robolib_help() {
     echo "    robolib_download [mcu]"
     echo "    robolib_avrdude [mcu]"
     echo ""
-    echo "    robolib_data"
+    echo "    robolib_data [comport [baudrate]]"
     echo ""
 }
