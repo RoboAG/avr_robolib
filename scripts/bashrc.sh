@@ -77,6 +77,7 @@ function robolib_init_3pi() {
     make init_3pi -f "${ROBOLIB_MAKEFILE}"
 }
 
+
 function robolib_all() {
 
     echo ""
@@ -87,7 +88,13 @@ function robolib_all() {
 
 function robolib_build() {
 
-    make build    -f "${ROBOLIB_MAKEFILE}"
+    # check if optional parameter exists and is not empty
+    ARG_MCU=""
+    if [ "$1" != "" ]; then
+        ARG_MCU="MCU=$1"
+    fi
+
+    make build    -f "${ROBOLIB_MAKEFILE}" $ARG_MCU
 }
 
 
@@ -104,12 +111,24 @@ function robolib_clean() {
 
 function robolib_avrdude() {
 
-    make avrdude  -f "${ROBOLIB_MAKEFILE}"
+    # check if optional parameter exists and is not empty
+    ARG_MCU=""
+    if [ "$1" != "" ]; then
+        ARG_MCU="MCU=$1"
+    fi
+
+    make avrdude  -f "${ROBOLIB_MAKEFILE}" $ARG_MCU
 }
 
 function robolib_download() {
 
-    make download -f "${ROBOLIB_MAKEFILE}"
+    # check if optional parameter exists and is not empty
+    ARG_MCU=""
+    if [ "$1" != "" ]; then
+        ARG_MCU="MCU=$1"
+    fi
+
+    make download -f "${ROBOLIB_MAKEFILE}" $ARG_MCU
 }
 
 
@@ -171,11 +190,11 @@ function robolib_help() {
     echo "    robolib_init_kepler"
     echo "    robolib_init_3pi"
     echo ""
-    echo "    robolib_build"
+    echo "    robolib_build [mcu]"
     echo "    robolib_clean"
     echo ""
-    echo "    robolib_download"
-    echo "    robolib_avrdude"
+    echo "    robolib_download [mcu]"
+    echo "    robolib_avrdude [mcu]"
     echo ""
     echo "    robolib_data"
     echo ""
