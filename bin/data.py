@@ -58,33 +58,33 @@ pos_in_x  = 4
 pos_out_y = (screen_max[0] // 2) + 2
 pos_out_x = 4
 
-tmp2 = " Receiving from \"" + sys.argv[1] + "\" "
-if (len(tmp2) < screen_max[1]):
-    pos_str = 0
-    while (pos_str < (screen_max[1] - len(tmp2)) // 2):
-        stdscr.addstr(0,pos_str,"=")
-        pos_str = pos_str + 1
+caption = " Receiving from \"" + sys.argv[1] + "\" "
+if (len(caption) < screen_max[1]):
+    pos_x = 0
+    while (pos_x < (screen_max[1] - len(caption)) // 2):
+        stdscr.addstr(0,pos_x,"=")
+        pos_x = pos_x + 1
 
-    stdscr.addstr(0,pos_str,str(tmp2))
-    pos_str = pos_str + len(tmp2)
+    stdscr.addstr(0,pos_x,str(caption))
+    pos_x = pos_x + len(caption)
 
-    while (pos_str < screen_max[1]):
-        stdscr.addstr(0,pos_str,"=")
-        pos_str = pos_str + 1
+    while (pos_x < screen_max[1]):
+        stdscr.addstr(0,pos_x,"=")
+        pos_x = pos_x + 1
 
-tmp2 = " Transmitting to \"" + sys.argv[1] + "\" "
-if (len(tmp2) < screen_max[1]):
-    pos_str = 0
-    while (pos_str < (screen_max[1] - len(tmp2)) // 2):
-        stdscr.addstr(screen_max[0] // 2,pos_str,"=")
-        pos_str = pos_str + 1
+caption = " Transmitting to \"" + sys.argv[1] + "\" "
+if (len(caption) < screen_max[1]):
+    pos_x = 0
+    while (pos_x < (screen_max[1] - len(caption)) // 2):
+        stdscr.addstr(screen_max[0] // 2,pos_x,"=")
+        pos_x = pos_x + 1
 
-    stdscr.addstr(screen_max[0] // 2,pos_str,str(tmp2))
-    pos_str = pos_str + len(tmp2)
+    stdscr.addstr(screen_max[0] // 2,pos_x,str(caption))
+    pos_x = pos_x + len(caption)
 
-    while (pos_str < screen_max[1]):
-        stdscr.addstr(screen_max[0] // 2,pos_str,"=")
-        pos_str = pos_str + 1
+    while (pos_x < screen_max[1]):
+        stdscr.addstr(screen_max[0] // 2,pos_x,"=")
+        pos_x = pos_x + 1
 
 stdscr.addstr(pos_in_y ,0,">>>")
 stdscr.addstr(pos_out_y,0,"<<<")
@@ -104,37 +104,37 @@ while 1:
         # receive data from comport
         input_count = comport.inWaiting()
         if (input_count > 0):
-            tmp = comport.read()
+            input_data = comport.read()
 
             # filter characters
-            tmp2 = ""
+            out_str = ""
             for current_byte in input_data:
                 new_skip_ascii_10 = False
                 new_skip_ascii_13 = False
                 if (current_byte == 13):
                     if (not skip_ascii_13):
-                        tmp2 = tmp2 + chr(10)
+                        out_str = out_str + chr(10)
                         new_skip_ascii_10 = True
 
                 elif (current_byte == 10):
                     if (not skip_ascii_10):
-                        tmp2 = tmp2 + chr(current_byte)
+                        out_str = out_str + chr(current_byte)
                         new_skip_ascii_13 = True
 
                 elif (current_byte < 32):
-                    tmp2 = tmp2 + '.'
+                    out_str = out_str + '.'
 
                 elif (current_byte > 255):
-                    tmp2 = tmp2 + '.'
+                    out_str = out_str + '.'
 
                 else :
-                    tmp2 = tmp2 + chr(current_byte)
+                    out_str = out_str + chr(current_byte)
 
                 skip_ascii_10 = new_skip_ascii_10
                 skip_ascii_13 = new_skip_ascii_13
 
             # print characters to screen
-            for current_char in tmp2:
+            for current_char in out_str:
                 if (ord(current_char) == 10):
                     pos_in_x = screen_max[1]
                 else:
@@ -169,19 +169,16 @@ while 1:
             stdscr.refresh()
 
             # save characters in file
-            pos_str = 0
-            while (pos_str < len(tmp2)):
+            for current_char in out_str:
                 if (file_lastdata != 0):
                     if (file_lastdata != -1):
                         f.write("\n")
                     f.write("[IN ] ")
                     file_lastdata = 0
 
-                f.write(tmp2[pos_str])
-                if (ord(tmp2[pos_str]) == 10):
+                f.write(current_char)
+                if (ord(current_char) == 10):
                     f.write("      ")
-
-                pos_str = pos_str + 1
             f.flush()
 
         # read data from input
@@ -280,11 +277,11 @@ while 1:
             f.write(str(signal_rts))
             f.flush()
 
-        tmp = comport.getCTS()
-        if (tmp != signal_cts):
-            signal_cts = tmp
+        current_signal_cts = comport.getCTS()
+        if (current_signal_cts != signal_cts):
+            signal_cts = current_signal_cts
 
-            if (tmp):
+            if (signal_cts):
                 stdscr.addstr(0,0, "CTS ")
             else:
                 stdscr.addstr(0,0, "cts ")
@@ -295,14 +292,14 @@ while 1:
                 f.write("\n")
             f.write("[CTS] ")
             file_lastdata = 2
-            f.write(str(tmp))
+            f.write(str(signal_cts))
             f.flush()
 
-        tmp = comport.getDSR()
-        if (tmp != signal_dsr):
-            signal_dsr = tmp
+        current_signal_dsr = comport.getDSR()
+        if (current_signal_dsr != signal_dsr):
+            signal_dsr = current_signal_dsr
 
-            if (tmp):
+            if (signal_dsr):
                 stdscr.addstr(0,screen_max[1] - 4, " DSR")
             else:
                 stdscr.addstr(0,screen_max[1] - 4, " dsr")
@@ -313,7 +310,7 @@ while 1:
                 f.write("\n")
             f.write("[DSR] ")
             file_lastdata = 2
-            f.write(str(tmp))
+            f.write(str(signal_dsr))
             f.flush()
 
     except:
