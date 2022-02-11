@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.6.2                                                              #
-# Date   : 08.10.2021                                                         #
+# Version: 1.7.0                                                              #
+# Date   : 11.02.2022                                                         #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -332,32 +332,38 @@ QUOTE="
 COLON=:
 
 # define phony targets for make commands
-.PHONY: all   ini ini_init   init_kepler init_3pi   build build_init \
-  clean_keep_output clean   program download avrdude   data
+.PHONY:   build all   lib lib_init   compile compile_init \
+          clean_keep_output clean                         \
+          init_kepler init_3pi  \
+          program download avrdude   data
 
 
-all: ini build
+build: lib compile
 	@echo
 	@echo "All done :-)"
 
+all: build
+	@echo
+	@echo "'make all' is deprecated - please use **make build** instead"
 
-build: build_init $(OUTPUT).hex
+
+lib: lib_init $(LIB_INI) $(HDR_INI)
+
+lib_init:
+	@echo
+	@echo "*** initiating project \"make lib\""
+	mkdir -p $(PATH_SUB_LIB)
+
+
+compile: compile_init $(OUTPUT).hex
 	@echo
 	@echo Compilation done - No Errors.
 
-build_init:
+compile_init:
 	@echo
-	@echo "*** compiling project \"make build\""
+	@echo "*** compiling project \"make compile\""
 	@echo
 	mkdir -p $(PATH_SUB_TMP)
-
-
-ini: ini_init $(LIB_INI) $(HDR_INI)
-
-ini_init:
-	@echo
-	@echo "*** initiating project \"make ini\""
-	mkdir -p $(PATH_SUB_LIB)
 
 
 clean_keep_output:
