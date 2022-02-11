@@ -3,7 +3,7 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.7.0                                                              #
+# Version: 1.7.1                                                              #
 # Date   : 11.02.2022                                                         #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -151,10 +151,21 @@ ifeq ($(NO_AUTO),)
 endif
 
 ###############################################################################
+# check for special MCU types
+
+ifeq ($(strip $(MCU)),3pi)
+    MCU_TEMP = atmega328p
+    POLOLU = 1
+else
+    MCU_TEMP = $(MCU)
+endif
+MCU_INTERNAL=$(strip $(MCU_TEMP))
+
+###############################################################################
 # name of downloader
 DOWNLOADER = $(PATH_ROBOLIB_INTERNAL)$(DOWNLOADER_BIN)
 # downloader options
-DOWNLOADER_OPTIONS = -I $(OUTPUT).hex -v -p $(MCU) \
+DOWNLOADER_OPTIONS = -I $(OUTPUT).hex -v -p $(MCU_INTERNAL) \
   -P $(COMPORT_PROG_INTERNAL) -b $(BAUDRATE_PROG) $(RESET_SEQUENCE)
 
 # name of terminal
@@ -169,7 +180,7 @@ else
     AVRDUDE = sudo avrdude
 endif
 # downloader options
-AVRDUDE_OPTIONS = -v -p $(MCU) -P $(COMPORT_AVRDUDE) -c AVRISP2 \
+AVRDUDE_OPTIONS = -v -p $(MCU_INTERNAL) -P $(COMPORT_AVRDUDE) -c AVRISP2 \
   -B $(BAUDRATE_AVRDUDE) -e -U flash:w:$(OUTPUT).hex
 
 ###############################################################################
@@ -250,7 +261,8 @@ else
       $(PATH_SUB_LIB), $(filter %/,$(wildcard */)))
 
     # list of all source files within found paths
-    SRC:= $(patsubst ./%,%,$(wildcard $(foreach dir,$(PATH_SOURCE), $(dir)*.c)))
+    SRC:= $(patsubst ./%,%,$(wildcard \
+      $(foreach dir,$(PATH_SOURCE), $(dir)*.c)))
 endif
 ifneq ($(DEBUG),)
     $(info source files: $(SRC))
@@ -280,7 +292,7 @@ endif
 
 # pololu
 ifneq ($(strip $(POLOLU)),)
-    LIB_POLOLU:= $(PATH_MAKE)../../pololu/libpololu_$(strip $(MCU)).a
+    LIB_POLOLU:= $(PATH_MAKE)../../pololu/libpololu_$(MCU_INTERNAL).a
 
     HDR_POLOLU:= $(PATH_MAKE)../../pololu/src/
     #HDR_POLOLU = $(PATH_MAKE)../../pololu/pololu/
@@ -298,7 +310,7 @@ endif
 ###############################################################################
 # compiler and linker flags
 
-CFLAGS  = -mmcu=$(strip $(MCU)) -I. -I "$(PATH_ROBOLIB_INC)"
+CFLAGS  = -mmcu=$(MCU_INTERNAL) -I. -I "$(PATH_ROBOLIB_INC)"
 CFLAGS += -gstabs -Os -funsigned-char -funsigned-bitfields
 CFLAGS += -fpack-struct -fshort-enums
 CFLAGS += -Wall -Wstrict-prototypes -std=gnu99
@@ -498,7 +510,7 @@ endif
 	@echo "*** linking project"
 	avr-gcc $(CFLAGS) $(OBJ) $(LIB_ALL) --output $@ $(LDFLAGS)
 	@echo
-	@avr-size --mcu $(MCU) -C $@
+	@avr-size --mcu $(MCU_INTERNAL) -C $@
 
 $(PATH_SUB_TMP)%.o: %.c
 	@echo
