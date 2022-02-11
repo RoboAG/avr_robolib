@@ -1,12 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 ###############################################################################
 #                                                                             #
 # bin/data.py                                                                 #
 # ===========                                                                 #
 #                                                                             #
-# Version: 1.3.3                                                              #
-# Date   : 07.02.19                                                           #
+# Version: 1.4.0                                                              #
+# Date   : 11.02.22                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -21,11 +21,11 @@ import time
 
 # check for arguments
 if (len(sys.argv) < 3):
-    print "not enough arguments - usage:"
-    print "python " + sys.argv[0] + " <serial port> <baudrate>"
+    print("not enough arguments - usage:")
+    print("python " + sys.argv[0] + " <serial port> <baudrate>")
     sys.exit()
 
-comport = serial.Serial(port=sys.argv[1], baudrate=long(sys.argv[2]),
+comport = serial.Serial(port=sys.argv[1], baudrate=int(sys.argv[2]),
   timeout = None, parity = serial.PARITY_NONE,
   stopbits = serial.STOPBITS_TWO, xonxoff = False, bytesize = serial.EIGHTBITS,
   rtscts = False, dsrdtr = False)
@@ -42,7 +42,7 @@ comport.flushInput()
 
 # save all communication in a file
 now = datetime.datetime.now().strftime("%Y_%m_%d_%H%M")
-f = file(now + ".txt","w")
+f = open(now + ".txt","w")
 # -1=nothing; 0=input; 1=output; 2=other
 file_lastdata = -1
 
@@ -55,13 +55,13 @@ stdscr.nodelay(1)
 screen_max = stdscr.getmaxyx()
 pos_in_y  = 2
 pos_in_x  = 4
-pos_out_y = (screen_max[0] / 2) + 2
+pos_out_y = (screen_max[0] // 2) + 2
 pos_out_x = 4
 
 tmp2 = " Receiving from \"" + sys.argv[1] + "\" "
 if (len(tmp2) < screen_max[1]):
     pos_str = 0
-    while (pos_str < (screen_max[1] - len(tmp2)) / 2):
+    while (pos_str < (screen_max[1] - len(tmp2)) // 2):
         stdscr.addstr(0,pos_str,"=")
         pos_str = pos_str + 1
 
@@ -75,15 +75,15 @@ if (len(tmp2) < screen_max[1]):
 tmp2 = " Transmitting to \"" + sys.argv[1] + "\" "
 if (len(tmp2) < screen_max[1]):
     pos_str = 0
-    while (pos_str < (screen_max[1] - len(tmp2)) / 2):
-        stdscr.addstr(screen_max[0] / 2,pos_str,"=")
+    while (pos_str < (screen_max[1] - len(tmp2)) // 2):
+        stdscr.addstr(screen_max[0] // 2,pos_str,"=")
         pos_str = pos_str + 1
 
-    stdscr.addstr(screen_max[0] / 2,pos_str,str(tmp2))
+    stdscr.addstr(screen_max[0] // 2,pos_str,str(tmp2))
     pos_str = pos_str + len(tmp2)
 
     while (pos_str < screen_max[1]):
-        stdscr.addstr(screen_max[0] / 2,pos_str,"=")
+        stdscr.addstr(screen_max[0] // 2,pos_str,"=")
         pos_str = pos_str + 1
 
 stdscr.addstr(pos_in_y ,0,">>>")
@@ -102,46 +102,43 @@ counter = 0
 while 1:
     try:
         # receive data from comport
-        tmp = str(comport.read(comport.inWaiting()))
+        input_count = comport.inWaiting()
+        if (input_count > 0):
+            tmp = comport.read()
 
-        #tmp = ""
-        tmp2 = ""
-        if (len(tmp) > 0):
             # filter characters
-            pos_str = 0
-            while (pos_str < len(tmp)):
+            tmp2 = ""
+            for current_byte in input_data:
                 new_skip_ascii_10 = False
                 new_skip_ascii_13 = False
-                if (ord(tmp[pos_str]) == 13):
+                if (current_byte == 13):
                     if (not skip_ascii_13):
                         tmp2 = tmp2 + chr(10)
                         new_skip_ascii_10 = True
 
-                elif (ord(tmp[pos_str]) == 10):
+                elif (current_byte == 10):
                     if (not skip_ascii_10):
-                        tmp2 = tmp2 + tmp[pos_str]
+                        tmp2 = tmp2 + chr(current_byte)
                         new_skip_ascii_13 = True
 
-                elif (ord(tmp[pos_str]) < 32):
+                elif (current_byte < 32):
                     tmp2 = tmp2 + '.'
 
-                elif (ord(tmp[pos_str]) > 255):
+                elif (current_byte > 255):
                     tmp2 = tmp2 + '.'
 
                 else :
-                    tmp2 = tmp2 + tmp[pos_str]
+                    tmp2 = tmp2 + chr(current_byte)
 
-                pos_str = pos_str + 1
                 skip_ascii_10 = new_skip_ascii_10
                 skip_ascii_13 = new_skip_ascii_13
 
             # print characters to screen
-            pos_str = 0
-            while (pos_str < len(tmp2)):
-                if (ord(tmp2[pos_str]) == 10):
+            for current_char in tmp2:
+                if (ord(current_char) == 10):
                     pos_in_x = screen_max[1]
                 else:
-                    stdscr.addstr(pos_in_y,pos_in_x, str(tmp2[pos_str]))
+                    stdscr.addstr(pos_in_y,pos_in_x, str(current_char))
 
                 # next character is one position to the left
                 pos_in_x = pos_in_x + 1
@@ -154,12 +151,12 @@ while 1:
                     # jump to next line
                     pos_in_y = pos_in_y + 1
                     # check for wrap around
-                    if (pos_in_y >= (screen_max[0] / 2) - 1):
+                    if (pos_in_y >= (screen_max[0] // 2) - 1):
                         pos_in_y = 2
 
                     # clear the following line
                     pos_y = pos_in_y + 1
-                    if (pos_y         >= (screen_max[0] / 2) - 1):
+                    if (pos_y >= (screen_max[0] // 2) - 1):
                         pos_y = 2
                     pos_x = 0
                     while (pos_x < screen_max[1]):
@@ -167,8 +164,6 @@ while 1:
                         pos_x = pos_x + 1
 
                     stdscr.addstr(pos_in_y,0, ">>> ")
-
-                pos_str = pos_str + 1
 
             stdscr.addstr(pos_out_y,pos_out_x, "")
             stdscr.refresh()
@@ -198,7 +193,7 @@ while 1:
           (skip_special_character == False)):
 
             # send data
-            comport.write(str(chr(c)))
+            comport.write([c])
             if (c == 13):
                 # dummy
                 j = 1
@@ -223,12 +218,12 @@ while 1:
                 pos_out_y = pos_out_y + 1
                 # check for wrap around
                 if (pos_out_y >= screen_max[0] - 1):
-                    pos_out_y = screen_max[0] / 2 + 2
+                    pos_out_y = screen_max[0] // 2 + 2
 
                 # clear the following line
                 pos_y = pos_out_y + 1
                 if (pos_y         >= screen_max[0] - 1):
-                    pos_y = screen_max[0] / 2 + 2
+                    pos_y = screen_max[0] // 2 + 2
                 pos_x = 0
                 while (pos_x < screen_max[1]):
                     stdscr.addstr(pos_y,pos_x, " ")
@@ -256,9 +251,9 @@ while 1:
             comport.setDTR(signal_dtr)
 
             if (signal_dtr):
-                stdscr.addstr(screen_max[0] / 2,screen_max[1] - 4, " DTR")
+                stdscr.addstr(screen_max[0] // 2,screen_max[1] - 4, " DTR")
             else:
-                stdscr.addstr(screen_max[0] / 2,screen_max[1] - 4, " dtr")
+                stdscr.addstr(screen_max[0] // 2,screen_max[1] - 4, " dtr")
             stdscr.addstr(pos_out_y,pos_out_x, "")
             stdscr.refresh()
 
@@ -272,9 +267,9 @@ while 1:
             signal_rts = not signal_rts
             comport.setRTS(signal_rts)
             if (signal_rts):
-                stdscr.addstr(screen_max[0] / 2,0, "RTS ")
+                stdscr.addstr(screen_max[0] // 2,0, "RTS ")
             else:
-                stdscr.addstr(screen_max[0] / 2,0, "rts ")
+                stdscr.addstr(screen_max[0] // 2,0, "rts ")
             stdscr.addstr(pos_out_y,pos_out_x, "")
             stdscr.refresh()
 
