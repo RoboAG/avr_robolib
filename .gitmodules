@@ -1,0 +1,4 @@
+[submodule "avr_downloader"]
+	path   = bin/avr_downloader
+	url    = https://github.com/peterweissig/cpp_avr_downloader.git
+	branch = master
