@@ -3,7 +3,7 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.7.2                                                              #
+# Version: 1.7.3                                                              #
 # Date   : 19.02.2022                                                         #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -100,7 +100,8 @@ PATH_SUB_SRC  = src/robolib/
 FILES_CLEAN = *.a *.o *.hex *.obj *.elf *.lss *.lst *.map *.sym
 
 # programs
-DOWNLOADER_BIN = bin/downloader
+DOWNLOADER_BIN = bin/avr_downloader/avr_downloader
+XBEE_BIN       = bin/avr_downloader/xbee_config
 DATA_BIN       = bin/data.py
 
 ###############################################################################
@@ -168,18 +169,23 @@ DOWNLOADER = $(PATH_ROBOLIB_INTERNAL)$(DOWNLOADER_BIN)
 DOWNLOADER_OPTIONS = -I $(OUTPUT).hex -v -p $(MCU_INTERNAL) \
   -P $(COMPORT_PROG_INTERNAL) -b $(BAUDRATE_PROG) $(RESET_SEQUENCE)
 
+# name of xbee config
+XBEE_CHECK = $(PATH_ROBOLIB_INTERNAL)$(XBEE_BIN)
+# xbee options
+XBEE_OPTIONS = -v -P $(COMPORT_DATA_INTERNAL)
+
 # name of terminal
 DATA = python $(PATH_ROBOLIB_INTERNAL)$(DATA_BIN)
 # terminal options
 DATA_OPTIONS = "$(COMPORT_DATA_INTERNAL)" "$(BAUDRATE_DATA)"
 
-# name of downloader (avrdude)
+# name of avrdude
 ifeq ($(SUDO_AVRDUDE),)
     AVRDUDE = avrdude
 else
     AVRDUDE = sudo avrdude
 endif
-# downloader options
+# avrdude options
 AVRDUDE_OPTIONS = -v -p $(MCU_INTERNAL) -P $(COMPORT_AVRDUDE) -c AVRISP2 \
   -B $(BAUDRATE_AVRDUDE) -e -U flash:w:$(OUTPUT).hex
 
@@ -346,8 +352,9 @@ COLON=:
 # define phony targets for make commands
 .PHONY:   build all   lib lib_init   compile compile_init \
           clean_keep_output clean                         \
-          init_kepler init_3pi  \
-          program download avrdude   data
+          init_kepler init_3pi                            \
+          program download avrdude                        \
+          data xbee_check
 
 
 build: lib compile
@@ -489,6 +496,18 @@ else
 	$(TERM_INTERNAL) -e "bash -c 'cd $(PATH_CUR)$(PATH_SUB_DATA) && \
           $(DATA) $(DATA_OPTIONS)'"
 endif
+
+xbee_check:
+	@echo
+	@echo "*** checking xbee config \"make $@\""
+ifeq (,$(KATE))
+	$(XBEE_CHECK) $(XBEE_OPTIONS)
+else
+	$(TERM_INTERNAL) -e "bash -c 'cd $(PATH_CUR) && \
+          $(XBEE_CHECK) $(XBEE_OPTIONS); \
+          echo; echo \"<press enter to exit>\"; read dummy'"
+endif
+
 
 # main path
 %.hex: $(PATH_SUB_TMP)%.elf
