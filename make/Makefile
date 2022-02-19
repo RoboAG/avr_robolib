@@ -3,8 +3,8 @@
 # Makefile                                                                    #
 # ========                                                                    #
 #                                                                             #
-# Version: 1.7.1                                                              #
-# Date   : 11.02.2022                                                         #
+# Version: 1.7.2                                                              #
+# Date   : 19.02.2022                                                         #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -411,12 +411,9 @@ init_3pi:
 	@echo
 	@echo "*** initialize for 3pi \"make $@\""
 ifeq ($(wildcard *.mcu),)
-	@echo "# Using pololu library"               >  atmega328p.mcu
-	@echo "POLOLU=1"                             >> atmega328p.mcu
-	@echo ""                                     >> atmega328p.mcu
-	@echo "# Comports"                           >> atmega328p.mcu
-	@echo "#COMPORT_AVRDUDE=/dev/ttyACM0"        >> atmega328p.mcu
-	@echo "#COMPORT_DATA=/dev/ttyUSB0"           >> atmega328p.mcu
+	@echo "# Comports"                           >  3pi.mcu
+	@echo "#COMPORT_AVRDUDE=/dev/ttyACM0"        >> 3pi.mcu
+	@echo "#COMPORT_DATA=/dev/ttyUSB0"           >> 3pi.mcu
 else
 	@echo "error mcu-file already exist"
 	@echo "  ($(wildcard *.mcu))"
