@@ -65,7 +65,7 @@ function robolib_repo_install_prerequisites() {
 
 
 #***************************[local project]***********************************
-# 2022 02 11
+# 2022 02 19
 
 function robolib_init_kepler() {
 
@@ -111,24 +111,36 @@ function robolib_clean() {
 
 function robolib_avrdude() {
 
-    # check if optional parameter exists and is not empty
-    ARG_MCU=""
+    # check if optional first parameter exists and is not empty
+    ARG_COMPORT=""
     if [ "$1" != "" ]; then
-        ARG_MCU="MCU=$1"
+        ARG_COMPORT="COMPORT_AVRDUDE=$1"
     fi
 
-    make avrdude  -f "${ROBOLIB_MAKEFILE}" $ARG_MCU
+    # check if optional second parameter exists and is not empty
+    ARG_MCU=""
+    if [ "$2" != "" ]; then
+        ARG_MCU="MCU=$2"
+    fi
+
+    make avrdude  -f "${ROBOLIB_MAKEFILE}" $ARG_COMPORT $ARG_MCU
 }
 
 function robolib_download() {
 
-    # check if optional parameter exists and is not empty
-    ARG_MCU=""
+    # check if optional first parameter exists and is not empty
+    ARG_COMPORT=""
     if [ "$1" != "" ]; then
-        ARG_MCU="MCU=$1"
+        ARG_COMPORT="COMPORT_PROG=$1"
     fi
 
-    make download -f "${ROBOLIB_MAKEFILE}" $ARG_MCU
+    # check if optional second parameter exists and is not empty
+    ARG_MCU=""
+    if [ "$2" != "" ]; then
+        ARG_MCU="MCU=$2"
+    fi
+
+    make download -f "${ROBOLIB_MAKEFILE}" $ARG_COMPORT $ARG_MCU
 }
 
 
@@ -187,7 +199,7 @@ function pololu_repo_make() {
 
 
 #***************************[help]*******************************************
-# 2022 02 11
+# 2022 02 19
 
 function robolib_help() {
 
@@ -206,8 +218,8 @@ function robolib_help() {
     echo "    robolib_build [mcu]"
     echo "    robolib_clean"
     echo ""
-    echo "    robolib_download [mcu]"
-    echo "    robolib_avrdude [mcu]"
+    echo "    robolib_download [comport [mcu]]"
+    echo "    robolib_avrdude [comport [mcu]]"
     echo ""
     echo "    robolib_data [comport [baudrate]]"
     echo ""
