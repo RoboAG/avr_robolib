@@ -3,8 +3,8 @@
 # bin/Makefile                                                                #
 # ============                                                                #
 #                                                                             #
-# Version: 1.0.4                                                              #
-# Date   : 07.02.19                                                           #
+# Version: 1.1.0                                                              #
+# Date   : 19.02.22                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
 # For help or bug report please visit:                                        #
@@ -13,17 +13,15 @@
 
 NAME_DL=avr_downloader
 NAME_XBEE=xbee_config
-PATH_DL=$(NAME_DL)/
-PATH_XBEE=$(NAME_XBEE)/
 
-DEST_DL=downloader
-DEST_XBEE=xbee
-PATH_DL_BIN=$(NAME_DL)/build/$(NAME_DL)/$(NAME_DL)
-PATH_XBEE_BIN=$(NAME_XBEE)/build/$(NAME_XBEE)/$(NAME_XBEE)
+PATH_REPO=$(NAME_DL)
+PATH_BUILD=$(PATH_REPO)/build
+FILE_MAKE=$(PATH_REPO)/Makefile
 
-URL_GIT_BASE=https://github.com/peterweissig/
-URL_CO_DL=$(URL_GIT_BASE)cpp_$(NAME_DL)/raw/master/checkout.sh
-URL_CO_XBEE=$(URL_GIT_BASE)cpp_$(NAME_XBEE)/raw/master/checkout.sh
+FILE_DL_SRC=$(PATH_REPO)/$(NAME_DL)
+FILE_XBEE_SRC=$(PATH_REPO)/$(NAME_XBEE)
+
+URL_REPO=https://github.com/peterweissig/cpp_avr_downloader
 
 ###############################################################################
 # path and directories
@@ -45,66 +43,35 @@ all: build
 
 build:
 	@echo
-ifneq ($(firstword $(wildcard $(PATH_DL) $(PATH_XBEE))),)
+ifneq ($(wildcard $(FILE_MAKE)),)
 	@echo "# compile additionals #"
-	-$(MAKE) -C $(PATH_DL)
-	-$(MAKE) -C $(PATH_XBEE)
+	$(MAKE) -C $(PATH_REPO)
 else
 	@echo "# no additional binaries #"
 	@echo "  use: \$$ make download_additionals"
 endif
 
 clean:
-ifneq ($(firstword $(wildcard $(PATH_DL) $(PATH_XBEE))),)
+ifneq ($(wildcard $(FILE_MAKE)),)
 	@echo
 	@echo "# clean additionals #"
-	-$(MAKE) -C $(PATH_DL) clean
-	-$(MAKE) -C $(PATH_XBEE) clean
+	$(MAKE) -C $(PATH_REPO) clean
 endif
 
 
-download_additionals: $(DEST_DL) $(DEST_XBEE)
+download_additionals: $(FILE_MAKE) build
 
 
 # git specific commands
 update:
 	@echo
-ifneq ($(firstword $(wildcard $(PATH_DL) $(PATH_XBEE))),)
 	@echo "# update additionals #"
-	-$(MAKE) -C $(PATH_DL) update
-	-$(MAKE) -C $(PATH_XBEE) update
-else
-	@echo "# no additional binaries #"
-	@echo "  use: \$$ make download_additionals"
-endif
+	git submodule update
 
 # real targets (not .PHONY)
-$(DEST_DL): $(PATH_DL_BIN)
-	@echo "# create softlink for downloader #"
-	-ln -s $(PATH_DL_BIN) $(DEST_DL)
-
-$(PATH_DL_BIN): $(PATH_DL)
-	@echo "# compile avr-downloader #"
-	$(MAKE) -C $(PATH_DL)
-
-$(PATH_DL):
-	@echo "# download avr-downloader #"
-	wget -nv $(URL_CO_DL)
-	bash ./checkout.sh
-	@echo
-
-$(DEST_XBEE): $(PATH_XBEE_BIN)
-	@echo "# create softlink for xbee #"
-	-ln -s $(PATH_XBEE_BIN) $(DEST_XBEE)
-
-$(PATH_XBEE_BIN): $(PATH_XBEE)
-	@echo "# compile xbee-tool #"
-	$(MAKE) -C $(PATH_XBEE)
-
-$(PATH_XBEE):
-	@echo "# download xbee-tool #"
-	wget -nv $(URL_CO_XBEE)
-	bash ./checkout.sh
+$(FILE_MAKE):
+	@echo "# clone submodule of avr-downloader #"
+	git submodule update --init
 	@echo
 
 ###############################################################################
