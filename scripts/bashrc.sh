@@ -162,6 +162,17 @@ function robolib_data() {
     make data     -f "${ROBOLIB_MAKEFILE}" $ARG_COMPORT $ARG_BAUDRATE
 }
 
+function robolib_xbee() {
+
+    # check if optional parameter exists and is not empty
+    ARG_COMPORT=""
+    if [ "$1" != "" ]; then
+        ARG_COMPORT="COMPORT_DATA=$1"
+    fi
+
+    make xbee_check -f "${ROBOLIB_MAKEFILE}" $ARG_COMPORT
+}
+
 
 #***************************[pololu]******************************************
 # 2018 01 11
@@ -222,5 +233,6 @@ function robolib_help() {
     echo "    robolib_avrdude [comport [mcu]]"
     echo ""
     echo "    robolib_data [comport [baudrate]]"
+    echo "    robolib_xbee [comport]"
     echo ""
 }
