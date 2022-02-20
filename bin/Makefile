@@ -3,7 +3,7 @@
 # bin/Makefile                                                                #
 # ============                                                                #
 #                                                                             #
-# Version: 1.1.0                                                              #
+# Version: 1.1.1                                                              #
 # Date   : 19.02.22                                                           #
 # Author : Peter Weissig                                                      #
 #                                                                             #
@@ -43,13 +43,14 @@ all: build
 
 build:
 	@echo
-ifneq ($(wildcard $(FILE_MAKE)),)
-	@echo "# compile additionals #"
-	$(MAKE) -C $(PATH_REPO)
-else
-	@echo "# no additional binaries #"
-	@echo "  use: \$$ make download_additionals"
-endif
+	@if [ -f "$(FILE_MAKE)" ]; then \
+	    echo "# compile additionals #"; \
+	    echo "$(MAKE) -C $(PATH_REPO)"; \
+	    $(MAKE) -C $(PATH_REPO); \
+	else \
+	    echo "# no additional binaries #"; \
+	    echo "  use: \$$ make download_additionals"; \
+	fi
 
 clean:
 ifneq ($(wildcard $(FILE_MAKE)),)
