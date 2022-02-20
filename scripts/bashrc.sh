@@ -209,6 +209,36 @@ function pololu_repo_make() {
 }
 
 
+#***************************[backwards compatibility]*************************
+# 2022 02 19
+
+temp_path="${ROBOLIB_PATH}bin/avr_downloader/"
+if [ -e "${temp_path}Makefile" ]; then
+
+    (
+        cd "$temp_path"
+        if git remote -v | grep --silent cpp_main; then
+            echo "warning: Changed structure of avr-downloader on 18.02.2022!"
+            echo "  You should remove the files accordingly:"
+            echo "    $ rm -rf \"${temp_path}*\""
+            temp_path="${ROBOLIB_PATH}bin/xbee_config/"
+            if [ -d "${temp_path}" ]; then
+                echo "    $ rm -rf \"${temp_path}\""
+            fi
+            files="downloader xbee"
+            temp_path="${ROBOLIB_PATH}bin/"
+            for file in $files; do
+                if [ -f "${temp_path}${file}" ]; then
+                    echo "    $ rm \"${temp_path}${file}\""
+                fi
+            done
+            echo "  Download submodule:"
+            echo "    $ robolib_repo_download_additionals"
+        fi
+    )
+fi
+
+
 #***************************[help]*******************************************
 # 2022 02 19
 
